@@ -1,0 +1,1 @@
+CUDA_VISIBLE_DEVICES=0 python main.py --data_folder ../Data/xing/filterShortDupl/ --data_action item.pickle --data_name xing --embedding_dim 300 --hidden_size 300 --lr 0.0001 --window_size 30 --test_observed 5 --n_epochs 100 --shared_embedding 1 --batch_size 300 --optimizer_type Adam --loss_type "XE"

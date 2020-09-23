@@ -1,0 +1,44 @@
+main_time.py shared_embedding1
+input_size 2898
+negative_num 1000
+BATCH_SIZE=300
+BPTT=1
+CHECKPOINT_DIR=../log/samplePaddingSessionRNN/checkpoint/01132047
+CUDA=True
+DATA_ACTION=item_time.pickle
+DATA_CATE=item_time.pickle
+DATA_FOLDER=../Data/movielen/ml-1m/
+DATA_NAME=movielens
+DATA_TIME=time_time.pickle
+DROPOUT_HIDDEN=0.2
+DROPOUT_INPUT=0
+EMBEDDING_DIM=300
+EPS=1e-06
+FINAL_ACT=tanh
+HIDDEN_SIZE=300
+IS_EVAL=False
+LOAD_MODEL=None
+LOSS_TYPE=XE
+LR=0.001
+MODEL_NAME=samplePaddingSessionRNN
+MOMENTUM=0.1
+N_EPOCHS=300
+NEGATIVE_NUM=1000
+NUM_LAYERS=1
+OPTIMIZER_TYPE=Adam
+PATIENCE=1000
+SAVE_DIR=models
+SEED=7
+SHARED_EMBEDDING=1
+SIGMA=None
+TEST_OBSERVED=5
+TEST_START_TIME=978133348
+TIME_SORT=False
+TOPK=20
+VALID_START_TIME=975768738
+WARM_START=5
+WEIGHT_DECAY=0.0
+WINDOW_SIZE=200
+-------------------
+share embedding
+**********0*****

@@ -1,0 +1,345 @@
+main_time.py shared_embedding1
+input_size 103
+negative_num 80
+BATCH_SIZE=100
+BPTT=1
+CHECKPOINT_DIR=../log/samplePaddingSessionRNN/checkpoint/01191420
+CUDA=True
+DATA_ACTION=cate_time.pickle
+DATA_CATE=cate_time.pickle
+DATA_FOLDER=../Data/BeerAdvocate/
+DATA_NAME=taobao
+DATA_TIME=time_time.pickle
+DROPOUT_HIDDEN=0.2
+DROPOUT_INPUT=0
+EMBEDDING_DIM=32
+EPS=1e-06
+FINAL_ACT=tanh
+HIDDEN_SIZE=32
+IS_EVAL=False
+LOAD_MODEL=None
+LOSS_TYPE=XE
+LR=0.0001
+MODEL_NAME=samplePaddingSessionRNN
+MOMENTUM=0.1
+N_EPOCHS=300
+NEGATIVE_NUM=80
+NUM_LAYERS=1
+OPTIMIZER_TYPE=Adam
+PATIENCE=1000
+SAVE_DIR=models
+SEED=7
+SHARED_EMBEDDING=1
+SIGMA=None
+TEST_OBSERVED=5
+TEST_START_TIME=1310947622
+TIME_SORT=False
+TOPK=3
+VALID_START_TIME=1296185247
+WARM_START=5
+WEIGHT_DECAY=0.0001
+WINDOW_SIZE=50
+-------------------
+share embedding
+**********0*****
+total_test_num5500
+train Epoch: 0, train loss: 4.4123,  loss: 4.1277,recall: 0.1895, mrr: 0.1279, time: 20.332168579101562
+total_test_num55200
+Epoch: 0, loss: 4.0544, recall: 0.2238, mrr: 0.1491, time: 21.0153706073761
+best recall: 0.22375	 best mrr: 	0.0
+**********1*****
+total_test_num4900
+train Epoch: 1, train loss: 3.9629,  loss: 4.0189,recall: 0.2020, mrr: 0.1366, time: 20.918232202529907
+total_test_num55200
+Epoch: 1, loss: 3.9515, recall: 0.2365, mrr: 0.1581, time: 21.60303544998169
+best recall: 0.23653985507246378	 best mrr: 	0.1581431137924285
+**********2*****
+total_test_num5500
+train Epoch: 2, train loss: 3.9076,  loss: 3.9803,recall: 0.2155, mrr: 0.1455, time: 21.191514015197754
+total_test_num55200
+Epoch: 2, loss: 3.9292, recall: 0.2384, mrr: 0.1595, time: 21.886669635772705
+best recall: 0.2383876811594203	 best mrr: 	0.15953804221868084
+**********3*****
+total_test_num4700
+train Epoch: 3, train loss: 3.8869,  loss: 4.0014,recall: 0.2026, mrr: 0.1365, time: 20.67748475074768
+total_test_num55200
+Epoch: 3, loss: 3.9161, recall: 0.2407, mrr: 0.1612, time: 21.362947702407837
+best recall: 0.24072463768115943	 best mrr: 	0.1611594187527679
+**********4*****
+total_test_num3400
+train Epoch: 4, train loss: 3.8747,  loss: 3.9555,recall: 0.2115, mrr: 0.1446, time: 22.049873113632202
+total_test_num55200
+Epoch: 4, loss: 3.9072, recall: 0.2419, mrr: 0.1624, time: 22.82010841369629
+best recall: 0.2418659420289855	 best mrr: 	0.16241847753416802
+**********5*****
+total_test_num3600
+train Epoch: 5, train loss: 3.8659,  loss: 3.9415,recall: 0.2247, mrr: 0.1520, time: 23.988877296447754
+total_test_num55200
+Epoch: 5, loss: 3.9017, recall: 0.2427, mrr: 0.1635, time: 24.72955632209778
+best recall: 0.24269927536231883	 best mrr: 	0.1634842988535546
+**********6*****
+total_test_num4300
+train Epoch: 6, train loss: 3.8595,  loss: 3.9543,recall: 0.2174, mrr: 0.1455, time: 20.777820825576782
+total_test_num55200
+Epoch: 6, loss: 3.8991, recall: 0.2433, mrr: 0.1629, time: 21.522841930389404
+best recall: 0.24333333333333335	 best mrr: 	0.1629378004539488
+**********7*****
+total_test_num5300
+train Epoch: 7, train loss: 3.8548,  loss: 3.9413,recall: 0.2219, mrr: 0.1475, time: 20.63172459602356
+total_test_num55200
+Epoch: 7, loss: 3.8923, recall: 0.2431, mrr: 0.1633, time: 21.309359073638916
+early stop counter 1
+best recall: 0.24333333333333335	 best mrr: 	0.1629378004539488
+**********8*****
+total_test_num5800
+train Epoch: 8, train loss: 3.8509,  loss: 3.9592,recall: 0.2109, mrr: 0.1448, time: 20.509465217590332
+total_test_num55200
+Epoch: 8, loss: 3.8896, recall: 0.2449, mrr: 0.1641, time: 21.2114315032959
+best recall: 0.2448731884057971	 best mrr: 	0.16411231726785933
+**********9*****
+total_test_num4800
+train Epoch: 9, train loss: 3.8478,  loss: 3.9518,recall: 0.2135, mrr: 0.1422, time: 20.77221441268921
+total_test_num55200
+Epoch: 9, loss: 3.8894, recall: 0.2440, mrr: 0.1636, time: 21.462501049041748
+early stop counter 1
+best recall: 0.2448731884057971	 best mrr: 	0.16411231726785933
+**********10*****
+total_test_num4200
+train Epoch: 10, train loss: 3.8452,  loss: 3.9845,recall: 0.2043, mrr: 0.1386, time: 19.87490153312683
+total_test_num55200
+Epoch: 10, loss: 3.8861, recall: 0.2455, mrr: 0.1643, time: 20.54756450653076
+best recall: 0.2454891304347826	 best mrr: 	0.16426026425661816
+**********11*****
+total_test_num4500
+train Epoch: 11, train loss: 3.8426,  loss: 3.9229,recall: 0.2313, mrr: 0.1533, time: 20.257405519485474
+total_test_num55200
+Epoch: 11, loss: 3.8844, recall: 0.2461, mrr: 0.1651, time: 20.94344997406006
+best recall: 0.24605072463768116	 best mrr: 	0.1650634049370453
+**********12*****
+total_test_num5000
+train Epoch: 12, train loss: 3.8404,  loss: 3.9030,recall: 0.2214, mrr: 0.1518, time: 20.422535181045532
+total_test_num55200
+Epoch: 12, loss: 3.8837, recall: 0.2453, mrr: 0.1645, time: 21.106089115142822
+early stop counter 1
+best recall: 0.24605072463768116	 best mrr: 	0.1650634049370453
+**********13*****
+total_test_num4500
+train Epoch: 13, train loss: 3.8386,  loss: 3.9457,recall: 0.2118, mrr: 0.1464, time: 20.619462966918945
+total_test_num55200
+Epoch: 13, loss: 3.8824, recall: 0.2444, mrr: 0.1637, time: 21.304872512817383
+early stop counter 2
+best recall: 0.24605072463768116	 best mrr: 	0.1650634049370453
+**********14*****
+total_test_num3800
+train Epoch: 14, train loss: 3.8367,  loss: 3.8974,recall: 0.2224, mrr: 0.1524, time: 21.21982455253601
+total_test_num55200
+Epoch: 14, loss: 3.8800, recall: 0.2444, mrr: 0.1641, time: 21.902355194091797
+early stop counter 3
+best recall: 0.24605072463768116	 best mrr: 	0.1650634049370453
+**********15*****
+total_test_num4800
+train Epoch: 15, train loss: 3.8352,  loss: 3.9221,recall: 0.2175, mrr: 0.1487, time: 21.693718671798706
+total_test_num55200
+Epoch: 15, loss: 3.8809, recall: 0.2446, mrr: 0.1637, time: 22.408047437667847
+early stop counter 4
+best recall: 0.24605072463768116	 best mrr: 	0.1650634049370453
+**********16*****
+total_test_num4200
+train Epoch: 16, train loss: 3.8341,  loss: 3.9264,recall: 0.2171, mrr: 0.1513, time: 20.872591495513916
+total_test_num55200
+Epoch: 16, loss: 3.8772, recall: 0.2455, mrr: 0.1643, time: 21.55549669265747
+early stop counter 5
+best recall: 0.24605072463768116	 best mrr: 	0.1650634049370453
+**********17*****
+total_test_num5000
+train Epoch: 17, train loss: 3.8329,  loss: 3.9707,recall: 0.2136, mrr: 0.1395, time: 21.10525369644165
+total_test_num55200
+Epoch: 17, loss: 3.8775, recall: 0.2465, mrr: 0.1646, time: 21.801493883132935
+best recall: 0.2465036231884058	 best mrr: 	0.16461654467697162
+**********18*****
+total_test_num4000
+train Epoch: 18, train loss: 3.8318,  loss: 3.9022,recall: 0.2303, mrr: 0.1569, time: 21.04429316520691
+total_test_num55200
+Epoch: 18, loss: 3.8772, recall: 0.2450, mrr: 0.1637, time: 21.758368968963623
+early stop counter 1
+best recall: 0.2465036231884058	 best mrr: 	0.16461654467697162
+**********19*****
+total_test_num5300
+train Epoch: 19, train loss: 3.8310,  loss: 3.9084,recall: 0.2372, mrr: 0.1598, time: 20.958520889282227
+total_test_num55200
+Epoch: 19, loss: 3.8760, recall: 0.2449, mrr: 0.1640, time: 21.654080867767334
+early stop counter 2
+best recall: 0.2465036231884058	 best mrr: 	0.16461654467697162
+**********20*****
+total_test_num4700
+train Epoch: 20, train loss: 3.8294,  loss: 3.9213,recall: 0.2189, mrr: 0.1472, time: 20.34795355796814
+total_test_num55200
+Epoch: 20, loss: 3.8745, recall: 0.2461, mrr: 0.1649, time: 21.03420639038086
+early stop counter 3
+best recall: 0.2465036231884058	 best mrr: 	0.16461654467697162
+**********21*****
+total_test_num4300
+train Epoch: 21, train loss: 3.8287,  loss: 3.9415,recall: 0.2179, mrr: 0.1456, time: 20.21233558654785
+total_test_num55200
+Epoch: 21, loss: 3.8739, recall: 0.2455, mrr: 0.1646, time: 20.898740530014038
+early stop counter 4
+best recall: 0.2465036231884058	 best mrr: 	0.16461654467697162
+**********22*****
+total_test_num3600
+train Epoch: 22, train loss: 3.8278,  loss: 3.9323,recall: 0.2203, mrr: 0.1494, time: 20.219907999038696
+total_test_num55200
+Epoch: 22, loss: 3.8739, recall: 0.2456, mrr: 0.1649, time: 20.91104245185852
+early stop counter 5
+best recall: 0.2465036231884058	 best mrr: 	0.16461654467697162
+**********23*****
+total_test_num4300
+train Epoch: 23, train loss: 3.8271,  loss: 3.8995,recall: 0.2263, mrr: 0.1541, time: 20.208597898483276
+total_test_num55200
+Epoch: 23, loss: 3.8720, recall: 0.2466, mrr: 0.1655, time: 20.957619428634644
+best recall: 0.24659420289855072	 best mrr: 	0.16554649646623412
+**********24*****
+total_test_num4400
+train Epoch: 24, train loss: 3.8269,  loss: 3.9411,recall: 0.2145, mrr: 0.1473, time: 20.94461941719055
+total_test_num55200
+Epoch: 24, loss: 3.8732, recall: 0.2459, mrr: 0.1647, time: 21.638177633285522
+early stop counter 1
+best recall: 0.24659420289855072	 best mrr: 	0.16554649646623412
+**********25*****
+total_test_num3500
+train Epoch: 25, train loss: 3.8262,  loss: 3.9560,recall: 0.2077, mrr: 0.1386, time: 20.190975427627563
+total_test_num55200
+Epoch: 25, loss: 3.8710, recall: 0.2476, mrr: 0.1658, time: 20.883907556533813
+best recall: 0.2476268115942029	 best mrr: 	0.1657910616258564
+**********26*****
+total_test_num3100
+train Epoch: 26, train loss: 3.8255,  loss: 3.8543,recall: 0.2429, mrr: 0.1677, time: 20.952285051345825
+total_test_num55200
+Epoch: 26, loss: 3.8710, recall: 0.2458, mrr: 0.1651, time: 21.70403742790222
+early stop counter 1
+best recall: 0.2476268115942029	 best mrr: 	0.1657910616258564
+**********27*****
+total_test_num4600
+train Epoch: 27, train loss: 3.8249,  loss: 3.9074,recall: 0.2241, mrr: 0.1553, time: 20.406004905700684
+total_test_num55200
+Epoch: 27, loss: 3.8722, recall: 0.2454, mrr: 0.1645, time: 21.08925747871399
+early stop counter 2
+best recall: 0.2476268115942029	 best mrr: 	0.1657910616258564
+**********28*****
+total_test_num4200
+train Epoch: 28, train loss: 3.8246,  loss: 3.8885,recall: 0.2350, mrr: 0.1579, time: 21.295218467712402
+total_test_num55200
+Epoch: 28, loss: 3.8707, recall: 0.2467, mrr: 0.1653, time: 21.991880893707275
+early stop counter 3
+best recall: 0.2476268115942029	 best mrr: 	0.1657910616258564
+**********29*****
+total_test_num3900
+train Epoch: 29, train loss: 3.8241,  loss: 3.9156,recall: 0.2338, mrr: 0.1597, time: 20.404986143112183
+total_test_num55200
+Epoch: 29, loss: 3.8700, recall: 0.2467, mrr: 0.1655, time: 21.087392568588257
+early stop counter 4
+best recall: 0.2476268115942029	 best mrr: 	0.1657910616258564
+**********30*****
+total_test_num4400
+train Epoch: 30, train loss: 3.8233,  loss: 3.9365,recall: 0.2193, mrr: 0.1499, time: 20.32370662689209
+total_test_num55200
+Epoch: 30, loss: 3.8716, recall: 0.2463, mrr: 0.1654, time: 21.003909826278687
+early stop counter 5
+best recall: 0.2476268115942029	 best mrr: 	0.1657910616258564
+**********31*****
+total_test_num5000
+train Epoch: 31, train loss: 3.8224,  loss: 3.9064,recall: 0.2264, mrr: 0.1556, time: 20.5591938495636
+total_test_num55200
+Epoch: 31, loss: 3.8701, recall: 0.2478, mrr: 0.1660, time: 21.258090496063232
+best recall: 0.2477536231884058	 best mrr: 	0.1659541056504932
+**********32*****
+total_test_num3500
+train Epoch: 32, train loss: 3.8223,  loss: 3.9728,recall: 0.2114, mrr: 0.1430, time: 21.339053869247437
+total_test_num55200
+Epoch: 32, loss: 3.8686, recall: 0.2467, mrr: 0.1654, time: 22.05351161956787
+early stop counter 1
+best recall: 0.2477536231884058	 best mrr: 	0.1659541056504932
+**********33*****
+total_test_num4200
+train Epoch: 33, train loss: 3.8216,  loss: 3.9196,recall: 0.2212, mrr: 0.1504, time: 21.14536452293396
+total_test_num55200
+Epoch: 33, loss: 3.8691, recall: 0.2473, mrr: 0.1659, time: 21.838961362838745
+early stop counter 2
+best recall: 0.2477536231884058	 best mrr: 	0.1659541056504932
+**********34*****
+total_test_num3900
+train Epoch: 34, train loss: 3.8215,  loss: 3.9078,recall: 0.2249, mrr: 0.1499, time: 20.508872747421265
+total_test_num55200
+Epoch: 34, loss: 3.8703, recall: 0.2464, mrr: 0.1651, time: 21.202746152877808
+early stop counter 3
+best recall: 0.2477536231884058	 best mrr: 	0.1659541056504932
+**********35*****
+total_test_num4300
+train Epoch: 35, train loss: 3.8210,  loss: 3.9228,recall: 0.2328, mrr: 0.1589, time: 21.155906915664673
+total_test_num55200
+Epoch: 35, loss: 3.8684, recall: 0.2468, mrr: 0.1655, time: 21.958223819732666
+early stop counter 4
+best recall: 0.2477536231884058	 best mrr: 	0.1659541056504932
+**********36*****
+total_test_num5800
+train Epoch: 36, train loss: 3.8210,  loss: 3.9127,recall: 0.2155, mrr: 0.1490, time: 20.658056259155273
+total_test_num55200
+Epoch: 36, loss: 3.8665, recall: 0.2468, mrr: 0.1652, time: 21.356380462646484
+early stop counter 5
+best recall: 0.2477536231884058	 best mrr: 	0.1659541056504932
+**********37*****
+total_test_num3900
+train Epoch: 37, train loss: 3.8206,  loss: 3.9303,recall: 0.2205, mrr: 0.1519, time: 21.60744309425354
+total_test_num55200
+Epoch: 37, loss: 3.8667, recall: 0.2474, mrr: 0.1662, time: 22.31016778945923
+early stop counter 6
+best recall: 0.2477536231884058	 best mrr: 	0.1659541056504932
+**********38*****
+total_test_num3700
+train Epoch: 38, train loss: 3.8201,  loss: 3.8883,recall: 0.2314, mrr: 0.1590, time: 20.65532112121582
+total_test_num55200
+Epoch: 38, loss: 3.8685, recall: 0.2465, mrr: 0.1653, time: 21.34507656097412
+early stop counter 7
+best recall: 0.2477536231884058	 best mrr: 	0.1659541056504932
+**********39*****
+total_test_num2900
+train Epoch: 39, train loss: 3.8198,  loss: 3.8430,recall: 0.2483, mrr: 0.1686, time: 21.485122203826904
+total_test_num55200
+Epoch: 39, loss: 3.8678, recall: 0.2466, mrr: 0.1651, time: 22.167842149734497
+early stop counter 8
+best recall: 0.2477536231884058	 best mrr: 	0.1659541056504932
+**********40*****
+total_test_num4400
+train Epoch: 40, train loss: 3.8195,  loss: 3.9083,recall: 0.2259, mrr: 0.1516, time: 21.960121631622314
+total_test_num55200
+Epoch: 40, loss: 3.8663, recall: 0.2470, mrr: 0.1656, time: 22.6980037689209
+early stop counter 9
+best recall: 0.2477536231884058	 best mrr: 	0.1659541056504932
+**********41*****
+total_test_num4400
+train Epoch: 41, train loss: 3.8191,  loss: 3.9130,recall: 0.2284, mrr: 0.1536, time: 21.810518264770508
+total_test_num55200
+Epoch: 41, loss: 3.8676, recall: 0.2470, mrr: 0.1657, time: 22.63202428817749
+early stop counter 10
+best recall: 0.2477536231884058	 best mrr: 	0.1659541056504932
+**********42*****
+total_test_num5800
+train Epoch: 42, train loss: 3.8187,  loss: 3.9334,recall: 0.2147, mrr: 0.1482, time: 21.360485076904297
+total_test_num55200
+Epoch: 42, loss: 3.8671, recall: 0.2472, mrr: 0.1654, time: 22.186482191085815
+early stop counter 11
+best recall: 0.2477536231884058	 best mrr: 	0.1659541056504932
+**********43*****
+total_test_num4000
+train Epoch: 43, train loss: 3.8181,  loss: 3.8891,recall: 0.2152, mrr: 0.1458, time: 20.876765966415405
+total_test_num55200
+Epoch: 43, loss: 3.8677, recall: 0.2457, mrr: 0.1647, time: 21.741689682006836
+early stop counter 12
+best recall: 0.2477536231884058	 best mrr: 	0.1659541056504932
+**********44*****
+total_test_num4200
+train Epoch: 44, train loss: 3.8179,  loss: 3.8926,recall: 0.2307, mrr: 0.1591, time: 21.222018480300903
+total_test_num55200
+Epoch: 44, loss: 3.8652, recall: 0.2472, mrr: 0.1662, time: 21.907615423202515
+early stop counter 13
+best recall: 0.2477536231884058	 best mrr: 	0.1659541056504932
+**********45*****

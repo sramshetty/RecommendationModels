@@ -1,0 +1,3 @@
+main_time.py shared_embedding1
+input_size 68008
+negative_num 10000
