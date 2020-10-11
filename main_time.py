@@ -142,7 +142,6 @@ def main():
 
 	hidden_size = args.hidden_size
 	num_layers = args.num_layers
-	num_heads = args.num_heads
 	batch_size = args.batch_size
 	dropout_input = args.dropout_input
 	dropout_hidden = args.dropout_hidden
