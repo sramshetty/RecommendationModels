@@ -160,7 +160,6 @@ def main():
 	time_sort = args.time_sort
 
 	window_size = args.window_size
-	positional_embedding = args.position_embedding
 	shared_embedding = args.shared_embedding
 
 	log = Logger()
