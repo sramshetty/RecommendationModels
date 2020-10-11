@@ -3,6 +3,7 @@ import torch
 import torch.nn.functional as F
 import datetime
 import numpy as np
+from model import PositionalEncoder, FeedForward, Encoder, Decoder
 
 class GRU4REC(nn.Module):
     def __init__(self, log, ss, input_size, hidden_size, output_size, num_layers=1, final_act='tanh', dropout_hidden=.8, dropout_input=0, embedding_dim=-1, use_cuda=False, shared_embedding=True):
@@ -102,3 +103,41 @@ class GRU4REC(nn.Module):
         h0 = torch.zeros(self.num_layers, batch_size, hidden_size).to(self.device)
 
         return h0
+
+
+class SelfAttention(nn.Module):
+
+    def __init__(self, input_size, hidden_size, output_size, num_layers=1, num_heads=1, use_cuda=True, batch_size=50, dropout_input=0, dropout_hidden=0.5, embedding_dim=-1, position_embedding=False, shared_embedding=True):
+        super().__init__()
+        
+        self.device = torch.device('cuda' if use_cuda else 'cpu')
+        
+        self.embed = nn.Embedding(input_size, hidden_size, padding_idx=0).to(self.device)
+        self.pe = PositionalEncoder(hidden_size) if position_embedding else None
+        self.encode_layers = nn.ModuleList([Encoder(hidden_size, num_heads, dropout=dropout_hidden) for i in range(num_layers)])
+        self.decode = Decoder(hidden_size, num_heads, dropout=dropout_hidden)
+    #         self.attn = nn.MultiheadAttention(hidden_size, num_heads, dropout=dropout_hidden)
+        if shared_embedding:
+            self.out_matrix = self.embed.weight.to(self.device)
+        else:
+            self.out_matrix = torch.rand(hidden_size, output_size, requires_grad=True).to(self.device)
+        
+        self = self.to(self.device)
+
+    def forward(self, src):
+        x = self.embed(src)
+        src_mask = (src == 0)
+        if self.pe != None:
+            x = self.pe(x)
+
+        x = x.transpose(0,1)
+        for i, layer in enumerate(self.encode_layers):
+            x = layer(x, x, x, src_mask) ### encoded input sequence
+        
+        trg = self.embed(src[:, -1]).unsqueeze(0)  ### last input
+        d_output = self.decode(trg, x, x, src_mask)
+#         d_output, _ = self.attn(trg, x, x, src_mask)
+    
+        output = F.linear(d_output.squeeze(0), self.out_matrix)
+        
+        return output   

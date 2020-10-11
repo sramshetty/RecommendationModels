@@ -103,3 +103,86 @@ class RNNModel(nn.Module):
     def init_hidden(self, bsz):
         return (Variable(torch.zeros(self.nlayers, bsz, self.nhid)),
                Variable(torch.zeros(self.nlayers, bsz, self.nhid)))
+
+
+class PositionalEncoder(nn.Module):
+
+    def __init__(self, d_model, max_seq_len = 80):
+        super().__init__()
+        self.d_model = d_model
+        
+        # create constant 'pe' matrix with values dependant on pos and i
+        pe = torch.zeros(max_seq_len, d_model)
+        for pos in range(max_seq_len):
+            for i in range(0, d_model, 2):
+                pe[pos, i] = math.sin(pos / (10000 ** ((2 * i)/d_model)))
+                pe[pos, i + 1] = math.cos(pos / (10000 ** ((2 * (i + 1))/d_model)))
+                
+        pe = pe.unsqueeze(0)
+        self.register_buffer('pe', pe)
+    
+    def forward(self, x):
+        # make embeddings relatively larger
+        x = x * math.sqrt(self.d_model)
+        #add constant to embedding
+        seq_len = x.size(1)
+        x = x + torch.autograd.Variable(self.pe[:,:seq_len], requires_grad=False)
+        return x
+
+
+class FeedForward(nn.Module):
+
+    def __init__(self, d_model, d_ff=128, dropout = 0.5):
+        super().__init__() 
+
+        self.linear_1 = nn.Linear(d_model, d_ff)
+        self.linear_2 = nn.Linear(d_ff, d_model)
+        self.dropout = nn.Dropout(dropout)
+
+    def forward(self, x):
+        x = self.dropout(nn.functional.relu(self.linear_1(x)))
+        x = self.linear_2(x)
+        return x
+
+
+class Encoder(nn.Module):
+
+    def __init__(self, d_model, heads, dropout = 0.5):
+        super().__init__()
+        
+        self.attn = nn.MultiheadAttention(d_model, heads, dropout=dropout)
+        self.norm_1 = nn.LayerNorm(d_model)
+        self.norm_2 = nn.LayerNorm(d_model)
+        self.ff = FeedForward(d_model)
+        
+    def forward(self, q, k, v, mask):
+        attn_output, attn_output_weights = self.attn(q, k, v, key_padding_mask=mask)
+        q = q + attn_output
+        q = self.norm_1(q)
+        q = q + self.ff(q)
+        q = self.norm_2(q)  
+        return q
+
+
+class Decoder(nn.Module):
+
+    def __init__(self, d_model, heads, dropout=0.5):
+        super().__init__()
+        
+        self.mask_attn = nn.MultiheadAttention(d_model, heads, dropout=dropout)
+        self.attn = nn.MultiheadAttention(d_model, heads, dropout=dropout)
+        self.norm_1 = nn.LayerNorm(d_model)
+        self.norm_2 = nn.LayerNorm(d_model)
+        self.norm_3 = nn.LayerNorm(d_model)
+        self.ff = FeedForward(d_model)
+
+    def forward(self, q, k, v, mask):
+        attn_output, attn_output_weights = self.mask_attn(q, k, v)
+        q = q + attn_output
+        q = self.norm_1(q)
+        attn_output, attn_output_weights = self.attn(q, k, v, key_padding_mask=mask)
+        q = q + attn_output
+        q = self.norm_2(q)
+        q = q + self.ff(q)
+        q = self.norm_2(q)  
+        return q

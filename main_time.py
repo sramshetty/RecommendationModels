@@ -142,6 +142,7 @@ def main():
 
 	hidden_size = args.hidden_size
 	num_layers = args.num_layers
+	num_heads = args.num_heads
 	batch_size = args.batch_size
 	dropout_input = args.dropout_input
 	dropout_hidden = args.dropout_hidden
@@ -160,6 +161,7 @@ def main():
 	time_sort = args.time_sort
 
 	window_size = args.window_size
+	positional_embedding = args.position_embedding
 	shared_embedding = args.shared_embedding
 
 	log = Logger()
@@ -170,7 +172,7 @@ def main():
 	log.addOutput2IO(msg)
 
 	if embedding_dim == -1:
-		msg = "embedding dim not -1 "+str(embedding_dim)
+		msg = "embedding dim not -1 " + str(embedding_dim)
 		log.addOutput2IO(msg)
 		raise AssertionError()
 
@@ -203,12 +205,12 @@ def main():
 	input_size = data_obj.items()
 	output_size = input_size
 
-	message = "input_size "+str(input_size)
+	message = "input_size " + str(input_size)
 	log.addOutput2IO(message)
 
 	negative_num = args.negative_num
 
-	message = "negative_num "+str(negative_num)
+	message = "negative_num " + str(negative_num)
 	log.addOutput2IO(message)
 
 	train_data_loader = MYDATALOADER(train_data, batch_size)
