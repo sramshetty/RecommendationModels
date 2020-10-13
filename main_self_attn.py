@@ -41,7 +41,7 @@ parser.add_argument('--topk', default=5, type=int)
 parser.add_argument('--warm_start', default=5, type=int)
 # etc
 parser.add_argument('--bptt', default=1, type=int)
-parser.add_argument('--test_observed', default=1, type=int) ### sequence with length of at least 1
+parser.add_argument('--test_observed', default=1, type=str) ### sequence with length of at least 1
 parser.add_argument('--window_size', default=30, type=int)
 parser.add_argument('--position_embedding', default=0, type=int)
 parser.add_argument('--shared_embedding', default=1, type=int)
@@ -123,8 +123,7 @@ def main():
     data_name = args.data_name
 
     observed_threshold = args.test_observed
-    print(type(observed_threshold))
-
+    
     train_data = dataset.Dataset(train_data, data_name, observed_threshold, window_size)
     valid_data = dataset.Dataset(valid_data, data_name, observed_threshold, window_size, itemmap=train_data.m_itemmap)
     test_data = dataset.Dataset(test_data, data_name, observed_threshold, window_size)
