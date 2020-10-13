@@ -107,7 +107,6 @@ def count_parameters(model):
     print("parameter_num", parameter_num) 
 
 def main():
-    dataset = 
     final_act = args.final_act
     BPTT = args.bptt
     time_sort = args.time_sort
