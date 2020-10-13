@@ -4,7 +4,7 @@ import torch
 import numpy as np
 import os
 import datetime
-import dataset_self_attn as dataset
+from dataset_self_attn *
 from loss import *
 from model import *
 from optimizer import *
@@ -124,7 +124,7 @@ def main():
 
     observed_threshold = args.test_observed
     
-    train_data = dataset.Dataset(train_data, data_name, observed_threshold, window_size)
+    train_data = dataset_self_attn.Dataset(train_data, data_name, observed_threshold, window_size)
     valid_data = dataset.Dataset(valid_data, data_name, observed_threshold, window_size, itemmap=train_data.m_itemmap)
     test_data = dataset.Dataset(test_data, data_name, observed_threshold, window_size)
 
