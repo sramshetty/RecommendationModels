@@ -111,6 +111,7 @@ def main():
     BPTT = args.bptt
     time_sort = args.time_sort
     window_size = args.window_size
+    print(type(window_size))
 
     train_data = args.data_folder+args.train_data
     valid_data = args.data_folder+args.valid_data
