@@ -5,7 +5,6 @@ import numpy as np
 import os
 import datetime
 import dataset_self_attn as dataset
-from dataset import *
 from loss import *
 from model import *
 from optimizer import *
