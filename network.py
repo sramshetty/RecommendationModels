@@ -116,7 +116,7 @@ class SelfAttention(nn.Module):
         self.pe = PositionalEncoder(hidden_size) if position_embedding else None
         self.encode_layers = nn.ModuleList([Encoder(hidden_size, num_heads, dropout=dropout_hidden) for i in range(num_layers)])
         self.decode = Decoder(hidden_size, num_heads, dropout=dropout_hidden)
-    #         self.attn = nn.MultiheadAttention(hidden_size, num_heads, dropout=dropout_hidden)
+
         if shared_embedding:
             self.out_matrix = self.embed.weight.to(self.device)
         else:
@@ -136,7 +136,6 @@ class SelfAttention(nn.Module):
         
         trg = self.embed(src[:, -1]).unsqueeze(0)  ### last input
         d_output = self.decode(trg, x, x, src_mask)
-#         d_output, _ = self.attn(trg, x, x, src_mask)
     
         output = F.linear(d_output.squeeze(0), self.out_matrix)
         
