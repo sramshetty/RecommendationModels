@@ -244,7 +244,7 @@ class DatasetAttn(object):
 				self.m_input_seq_idx_list.append(action_index)
 
 		def __len__(self):
-			
+			return len(self.m_input_action_seq_list)
 
 		def __getitem__(self, index):
 			x = self.m_input_action_seq_list[index]
