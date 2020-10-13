@@ -4,7 +4,7 @@ import torch
 import numpy as np
 import os
 import datetime
-from dataset_self_attn *
+from dataset_self_attn import *
 from loss import *
 from model import *
 from optimizer import *
