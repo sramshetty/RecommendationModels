@@ -123,6 +123,7 @@ def main():
     data_name = args.data_name
 
     observed_threshold = args.test_observed
+    print(type(observed_threshold))
 
     train_data = dataset.Dataset(train_data, data_name, observed_threshold, window_size)
     valid_data = dataset.Dataset(valid_data, data_name, observed_threshold, window_size, itemmap=train_data.m_itemmap)
