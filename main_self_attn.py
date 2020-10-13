@@ -4,7 +4,7 @@ import torch
 import numpy as np
 import os
 import datetime
-from datasetAttn import *
+from datasetattn import *
 from loss import *
 from model import *
 from optimizer import *
@@ -124,9 +124,9 @@ def main():
 
     observed_threshold = args.test_observed
     
-    train_data = datasetAttn.Dataset(train_data, data_name, observed_threshold, window_size)
-    valid_data = datasetAttn.Dataset(valid_data, data_name, observed_threshold, window_size, itemmap=train_data.m_itemmap)
-    test_data = datasetAttn.Dataset(test_data, data_name, observed_threshold, window_size)
+    train_data = datasetattn.Dataset(train_data, data_name, observed_threshold, window_size)
+    valid_data = datasetattn.Dataset(valid_data, data_name, observed_threshold, window_size, itemmap=train_data.m_itemmap)
+    test_data = datasetattn.Dataset(test_data, data_name, observed_threshold, window_size)
 
     if not args.is_eval:
         make_checkpoint_dir()
@@ -135,8 +135,8 @@ def main():
     output_size = input_size
     print("input_size", input_size)
 
-    train_data_loader = datasetAttn.DataLoader(train_data, args.batch_size)
-    valid_data_loader = datasetAttn.DataLoader(valid_data, args.batch_size)
+    train_data_loader = datasetattn.DataLoader(train_data, args.batch_size)
+    valid_data_loader = datasetattn.DataLoader(valid_data, args.batch_size)
 
     if not args.is_eval:
         model = SelfAttention(input_size, args.hidden_size, output_size,
