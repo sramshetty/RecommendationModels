@@ -4,7 +4,7 @@ import torch
 import numpy as np
 import os
 import datetime
-from dataset_self_attn import *
+from datasetAttn import *
 from loss import *
 from model import *
 from optimizer import *
@@ -107,6 +107,7 @@ def count_parameters(model):
     print("parameter_num", parameter_num) 
 
 def main():
+    dataset = 
     final_act = args.final_act
     BPTT = args.bptt
     time_sort = args.time_sort
@@ -124,9 +125,9 @@ def main():
 
     observed_threshold = args.test_observed
     
-    train_data = dataset_self_attn.Dataset(train_data, data_name, observed_threshold, window_size)
-    valid_data = dataset.Dataset(valid_data, data_name, observed_threshold, window_size, itemmap=train_data.m_itemmap)
-    test_data = dataset.Dataset(test_data, data_name, observed_threshold, window_size)
+    train_data = datasetAttn.Dataset(train_data, data_name, observed_threshold, window_size)
+    valid_data = datasetAttn.Dataset(valid_data, data_name, observed_threshold, window_size, itemmap=train_data.m_itemmap)
+    test_data = datasetAttn.Dataset(test_data, data_name, observed_threshold, window_size)
 
     if not args.is_eval:
         make_checkpoint_dir()
@@ -135,8 +136,8 @@ def main():
     output_size = input_size
     print("input_size", input_size)
 
-    train_data_loader = dataset.DataLoader(train_data, args.batch_size)
-    valid_data_loader = dataset.DataLoader(valid_data, args.batch_size)
+    train_data_loader = datasetAttn.DataLoader(train_data, args.batch_size)
+    valid_data_loader = datasetAttn.DataLoader(valid_data, args.batch_size)
 
     if not args.is_eval:
         model = SelfAttention(input_size, args.hidden_size, output_size,
