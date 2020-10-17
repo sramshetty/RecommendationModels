@@ -199,10 +199,10 @@ class TrainerAttn(object):
             print("*"*10, epoch, "*"*5)
             st = time.time()
             train_loss = self.train_epoch(epoch, batch_size)
-            loss, recall, mrr = self.evaluation.eval(self.train_data, batch_size, debug=False)
+            loss, recall, mrr = self.evaluation.evalAttn(self.train_data, batch_size, debug=False)
             print("Train Epoch: {}, train loss: {:.4f},  loss: {:.4f}, recall: {:.4f}, mrr: {:.4f}, time: {}".format(epoch, train_loss, loss, recall, mrr, time.time() - st))
 
-            loss, recall, mrr = self.evaluation.eval(self.eval_data, batch_size)
+            loss, recall, mrr = self.evaluation.evalAttn(self.eval_data, batch_size)
             print("Test  Epoch: {}, loss: {:.4f}, recall: {:.4f}, mrr: {:.4f}, time: {}".format(epoch, loss, recall, mrr, time.time() - st))
 #             checkpoint = {
 #                 'model': self.model.state_dict(),
@@ -236,6 +236,7 @@ class TrainerAttn(object):
             
             loss_batch = self.loss_func(logit_sampled_batch, target_y_batch)
 
+            print()
             losses.append(loss_batch.item())
             loss_batch.backward()
 
