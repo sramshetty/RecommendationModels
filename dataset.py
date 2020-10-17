@@ -243,25 +243,25 @@ class DatasetAttn(object):
 				self.m_target_action_seq_list.append(target_sub_seq)
 				self.m_input_seq_idx_list.append(action_index)
 
-		def __len__(self):
-			return len(self.m_input_action_seq_list)
+	def __len__(self):
+		return len(self.m_input_action_seq_list)
 
-		def __getitem__(self, index):
-			x = self.m_input_action_seq_list[index]
-			y = self.m_target_action_seq_list[index]
+	def __getitem__(self, index):
+		x = self.m_input_action_seq_list[index]
+		y = self.m_target_action_seq_list[index]
 
-			x = np.array(x)
-			y = np.array(y)
+		x = np.array(x)
+		y = np.array(y)
 
-			x_tensor = torch.LongTensor(x)
-			y_tensor = torch.LongTensor(y)
+		x_tensor = torch.LongTensor(x)
+		y_tensor = torch.LongTensor(y)
 
-			return x_tensor, y_tensor
+		return x_tensor, y_tensor
 
-		@property
-		def items(self):
-			print("first item", self.m_itemmap['<PAD>'])
-			return self.m_itemmap
+	@property
+	def items(self):
+		print("first item", self.m_itemmap['<PAD>'])
+		return self.m_itemmap
 
 
 class DataLoaderAttn():
