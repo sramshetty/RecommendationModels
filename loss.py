@@ -27,7 +27,7 @@ class LossFunction(nn.Module):
             raise NotImplementedError
 
     def forward(self, logit, target):
-        return self._loss_fn(logit)
+        return self._loss_fn(logit, target)
 
 
 class SampledCrossEntropyLoss(nn.Module):
@@ -89,7 +89,7 @@ class TOP1Loss(nn.Module):
         """
         super(TOP1Loss, self).__init__()
 
-    def forward(self, logit):
+    def forward(self, logit, target):
         """
         Args:
             logit (BxB): Variable that stores the logits for the items in the mini-batch
