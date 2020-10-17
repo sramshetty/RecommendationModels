@@ -26,7 +26,7 @@ class LossFunction(nn.Module):
         else:
             raise NotImplementedError
 
-    def forward(self, logit):
+    def forward(self, logit, target):
         return self._loss_fn(logit)
 
 
