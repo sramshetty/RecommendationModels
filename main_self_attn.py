@@ -131,7 +131,7 @@ def main():
     if not args.is_eval:
         make_checkpoint_dir()
 
-    input_size = len(train_data.items) // 100
+    input_size = len(train_data.items[:49])
     output_size = input_size
     print("input_size", input_size)
 
