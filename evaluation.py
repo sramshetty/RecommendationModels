@@ -80,7 +80,7 @@ class Evaluation(object):
 
 
 	def evalAttn(self, eval_data, batch_size, debug=False):
-		self.model.evalAttn()
+		self.model.eval()
 
 		losses = []
 		recalls = []
