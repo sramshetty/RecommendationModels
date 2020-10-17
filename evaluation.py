@@ -79,42 +79,42 @@ class Evaluation(object):
 		return mean_losses, mean_recall, mean_mrr
 
 
-    def evalAttn(self, eval_data, batch_size, debug=False):
-        self.model.eval()
+	def evalAttn(self, eval_data, batch_size, debug=False):
+		self.model.eval()
 
-        losses = []
-        recalls = []
-        mrrs = []
-        weights = []
+		losses = []
+		recalls = []
+		mrrs = []
+		weights = []
 
-        dataloader = eval_data
+		dataloader = eval_data
 
-        eval_iter = 0
+		eval_iter = 0
 
-        with torch.no_grad():
-            total_test_num = []
-            for input_x_batch, target_y_batch, idx_batch in dataloader:
-                input_x_batch = input_x_batch.to(self.device)
-                target_y_batch = target_y_batch.to(self.device)
-                warm_start_mask = (idx_batch>=self.warm_start).to(self.device)
+		with torch.no_grad():
+			total_test_num = []
+			for input_x_batch, target_y_batch, idx_batch in dataloader:
+				input_x_batch = input_x_batch.to(self.device)
+				target_y_batch = target_y_batch.to(self.device)
+				warm_start_mask = (idx_batch>=self.warm_start).to(self.device)
 
-                logit_batch = self.model(input_x_batch)
-                logit_sampled_batch = logit_batch[:, target_y_batch.view(-1)]
+				logit_batch = self.model(input_x_batch)
+				logit_sampled_batch = logit_batch[:, target_y_batch.view(-1)]
 
-                loss_batch = self.loss_func(logit_sampled_batch, target_y_batch)
+				loss_batch = self.loss_func(logit_sampled_batch, target_y_batch)
 
-                losses.append(loss_batch.item())
+				losses.append(loss_batch.item())
 
-                recall_batch, mrr_batch = evaluate(logit_batch, target_y_batch, warm_start_mask, k=self.topk, debug=debug)
+				recall_batch, mrr_batch = evaluate(logit_batch, target_y_batch, warm_start_mask, k=self.topk, debug=debug)
 
-                weights.append( int( warm_start_mask.int().sum() ) )
-                recalls.append(recall_batch)
-                mrrs.append(mrr_batch)
+				weights.append( int( warm_start_mask.int().sum() ) )
+				recalls.append(recall_batch)
+				mrrs.append(mrr_batch)
 
-                total_test_num.append(target_y_batch.view(-1).size(0))
+				total_test_num.append(target_y_batch.view(-1).size(0))
 
-        mean_losses = np.mean(losses)
-        mean_recall = np.average(recalls, weights=weights)
-        mean_mrr = np.average(mrrs, weights=weights)
-#         print(recalls, mrrs, weights)
-        return mean_losses, mean_recall, mean_mrr
+		mean_losses = np.mean(losses)
+		mean_recall = np.average(recalls, weights=weights)
+		mean_mrr = np.average(mrrs, weights=weights)
+		#print(recalls, mrrs, weights)
+		return mean_losses, mean_recall, mean_mrr
