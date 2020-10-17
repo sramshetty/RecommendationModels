@@ -124,7 +124,7 @@ class SelfAttention(nn.Module):
         
         self = self.to(self.device)
 
-    def forward(self, src, target):
+    def forward(self, src):
         x = self.embed(src)
         src_mask = (src == 0)
         if self.pe != None:
