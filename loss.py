@@ -43,7 +43,7 @@ class SampledCrossEntropyLoss(nn.Module):
         self.xe_loss = nn.CrossEntropyLoss()
 
     def forward(self, logit, target):
-        return self.xe_loss(logit.view(target.size(0), 50), target)
+        return self.xe_loss(logit.view(target.size(0), -1), target)
 
 class BPRLoss(nn.Module):
     def __init__(self):

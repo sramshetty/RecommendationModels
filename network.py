@@ -113,9 +113,13 @@ class SelfAttention(nn.Module):
         self.device = torch.device('cuda' if use_cuda else 'cpu')
         
         self.embed = nn.Embedding(input_size, hidden_size, padding_idx=0).to(self.device)
+        print("Finshed Embedded")
         self.pe = PositionalEncoder(hidden_size) if position_embedding else None
+        print("Finished Encoding inputs")
         self.encode_layers = nn.ModuleList([Encoder(hidden_size, num_heads, dropout=dropout_hidden) for i in range(num_layers)])
+        print("Encoded Layers")
         self.decode = Decoder(hidden_size, num_heads, dropout=dropout_hidden)
+        print("Decoded")
 
         if shared_embedding:
             self.out_matrix = self.embed.weight.to(self.device)
