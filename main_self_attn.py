@@ -128,7 +128,7 @@ def main():
     valid_data = dataset.DatasetAttn(valid_data, data_name, observed_threshold, window_size, itemmap=train_data.m_itemmap)
     test_data = dataset.DatasetAttn(test_data, data_name, observed_threshold, window_size)
 
-    train_data = train_data.itens[:1000]
+    train_data = train_data.items[:1000]
     valid_data = valid_data.items[:300]
     
     if not args.is_eval:
