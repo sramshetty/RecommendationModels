@@ -32,7 +32,7 @@ class LossFunction(nn.Module):
 
 class SampledCrossEntropyLoss(nn.Module):
     """ CrossEntropyLoss with n_classes = batch_size = the number of samples in the session-parallel mini-batch """
-    def __init__(self):
+    def __init__(self, use_cuda):
         """
         See Balazs Hihasi(ICLR 2016), pg.5
 
@@ -41,6 +41,7 @@ class SampledCrossEntropyLoss(nn.Module):
         """
         super(SampledCrossEntropyLoss, self).__init__()
         self.xe_loss = nn.CrossEntropyLoss()
+        self.use_cuda = use_cuda
 
     def forward(self, logit, target):
         batch_size = logit.size(1)
