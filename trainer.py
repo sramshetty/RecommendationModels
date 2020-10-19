@@ -239,6 +239,7 @@ class TrainerAttn(object):
             
             print("losses", losses)
             losses.append(loss_batch.item())
+            print("item pass")
             loss_batch.backward()
 
             self.optim.step()
