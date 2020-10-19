@@ -234,7 +234,7 @@ class TrainerAttn(object):
             ### batch_size*batch_size
             print(2)
             logit_sampled_batch = logit_batch[:, target_y_batch.view(-1)]
-            print(3)
+            print(idx_batch)
             loss_batch = self.loss_func(logit_sampled_batch, target_y_batch)
             
             print("losses", losses, loss_batch)
