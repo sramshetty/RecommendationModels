@@ -45,7 +45,7 @@ class SampledCrossEntropyLoss(nn.Module):
     def forward(self, logit, target):
         print("tensor", len(logit.view(target.size(0), -1)), len(logit.view(target.size(0), -1)[0]))
         print("target", len(target))
-        return self.xe_loss(logit.view(target.size(0), -1), target)
+        return self.xe_loss(logit.view(target.size(0), -1), target.unsqueeze(50))
 
 class BPRLoss(nn.Module):
     def __init__(self):
