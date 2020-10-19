@@ -112,9 +112,9 @@ def main():
     time_sort = args.time_sort
     window_size = args.window_size
 
-    train_data = (args.data_folder+args.train_data)[:.4 * len((args.data_folder+args.train_data))]
-    valid_data = (args.data_folder+args.valid_data)[:.4 * len((args.data_folder+args.valid_data))]
-    test_data = (args.data_folder+args.test_data)[:.4 * len((args.data_folder+args.test_data))]
+    train_data = (args.data_folder+args.train_data)[:int(.4 * len((args.data_folder+args.train_data)))]
+    valid_data = (args.data_folder+args.valid_data)[:int(.4 * len((args.data_folder+args.valid_data)))]
+    test_data = (args.data_folder+args.test_data)[:int(.4 * len((args.data_folder+args.test_data)))]
 
     print("Loading train data from {}".format(train_data))
     print("Loading valid data from {}".format(valid_data))
