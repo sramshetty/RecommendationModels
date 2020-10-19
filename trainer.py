@@ -235,7 +235,8 @@ class TrainerAttn(object):
             logit_sampled_batch = logit_batch[:, target_y_batch.view(-1)]
             
             loss_batch = self.loss_func(logit_sampled_batch, target_y_batch)
-
+            
+            print("losses", losses, loss_batch)
             losses.append(loss_batch.item())
             loss_batch.backward()
 
