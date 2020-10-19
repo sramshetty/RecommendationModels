@@ -43,9 +43,11 @@ class SampledCrossEntropyLoss(nn.Module):
         self.xe_loss = nn.CrossEntropyLoss()
 
     def forward(self, logit, target):
-        print("tensor", len(logit.view(target.size(0), -1)), len(logit.view(target.size(0), -1)[0]))
-        print("target", len(target))
-        return self.xe_loss(logit.view(target.size(0), -1), target)
+        batch_size = logit.size(1)
+        target = Variable(torch.arange(batch_size).long())
+        if self.use_cuda: target = target.cuda()
+
+        return self.xe_loss(logit, target)
 
 class BPRLoss(nn.Module):
     def __init__(self):
