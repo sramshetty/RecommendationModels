@@ -128,10 +128,13 @@ def main():
     valid_data = dataset.DatasetAttn(valid_data, data_name, observed_threshold, window_size, itemmap=train_data.m_itemmap)
     test_data = dataset.DatasetAttn(test_data, data_name, observed_threshold, window_size)
 
+    train_data = train_data[:1000]
+    valid_data = valid_data[:300]
+    
     if not args.is_eval:
         make_checkpoint_dir()
 
-    input_size = len(train_data.items) // 100
+    input_size = len(train_data.items)
     output_size = input_size
     print("input_size", input_size)
 
