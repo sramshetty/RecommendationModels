@@ -127,8 +127,6 @@ def main():
     train_data = dataset.DatasetAttn(train_data, data_name, observed_threshold, window_size)
     valid_data = dataset.DatasetAttn(valid_data, data_name, observed_threshold, window_size, itemmap=train_data.m_itemmap)
     test_data = dataset.DatasetAttn(test_data, data_name, observed_threshold, window_size)
-
-    print(train_data)
     
     if not args.is_eval:
         make_checkpoint_dir()
