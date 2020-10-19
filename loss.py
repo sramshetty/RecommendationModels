@@ -14,7 +14,7 @@ class LossFunction(nn.Module):
         self.device = torch.device('cuda' if use_cuda else 'cpu')
 
         if loss_type == 'XE':
-            self._loss_fn = SampledCrossEntropyLoss()
+            self._loss_fn = SampledCrossEntropyLoss(use_cuda)
         elif loss_type == 'TOP1':
             self._loss_fn = TOP1Loss()
         elif loss_type == 'BPR':
