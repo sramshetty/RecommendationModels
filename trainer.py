@@ -199,6 +199,7 @@ class TrainerAttn(object):
             print("*"*10, epoch, "*"*5)
             st = time.time()
             train_loss = self.train_epoch(epoch, batch_size)
+            print("found train loss", train_loss)
             loss, recall, mrr = self.evaluation.evalAttn(self.train_data, batch_size, debug=False)
             print("Train Epoch: {}, train loss: {:.4f},  loss: {:.4f}, recall: {:.4f}, mrr: {:.4f}, time: {}".format(epoch, train_loss, loss, recall, mrr, time.time() - st))
 
@@ -236,7 +237,6 @@ class TrainerAttn(object):
             logit_sampled_batch = logit_batch[:, target_y_batch.view(-1)]
             loss_batch = self.loss_func(logit_sampled_batch, target_y_batch)
             
-            print(loss_batch.item())
             losses.append(loss_batch.item())
             loss_batch.backward()
 
