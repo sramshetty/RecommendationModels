@@ -223,7 +223,6 @@ class TrainerAttn(object):
         torch.autograd.set_detect_anomaly(False)
 
         dataloader = self.train_data
-        print(dataloader)
         for input_x_batch, target_y_batch, idx_batch in dataloader:
             input_x_batch = input_x_batch.to(self.device)
             target_y_batch = target_y_batch.to(self.device)
@@ -241,5 +240,5 @@ class TrainerAttn(object):
             loss_batch.backward()
 
             self.optim.step()
-        print(losses)
+            print(losses)
         return np.mean(losses)
