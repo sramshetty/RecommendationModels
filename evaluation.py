@@ -98,7 +98,7 @@ class Evaluation(object):
 				target_y_batch = target_y_batch.to(self.device)
 				warm_start_mask = (idx_batch>=self.warm_start).to(self.device)
 
-				logit_batch = self.model(input_x_batch, target_y_batch)
+				logit_batch = self.model(input_x_batch)
 				logit_sampled_batch = logit_batch[:, target_y_batch.view(-1)]
 
 				loss_batch = self.loss_func(logit_sampled_batch, target_y_batch)
