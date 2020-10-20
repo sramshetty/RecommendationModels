@@ -48,7 +48,7 @@ class SampledCrossEntropyLoss(nn.Module):
         target = Variable(torch.arange(batch_size))
         if self.use_cuda: target = target.cuda()
 
-        return self.xe_loss(logit, target)
+        return self.xe_loss(logit, target.long())
 
 class BPRLoss(nn.Module):
     def __init__(self):
