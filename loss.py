@@ -45,7 +45,7 @@ class SampledCrossEntropyLoss(nn.Module):
 
     def forward(self, logit, target):
         batch_size = logit.size(1)
-        target = Variable(torch.arange(batch_size).int64())
+        target = Variable(torch.arange(batch_size).int64)
         if self.use_cuda: target = target.cuda()
 
         return self.xe_loss(logit, target)
