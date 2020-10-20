@@ -240,5 +240,4 @@ class TrainerAttn(object):
             loss_batch.backward()
 
             self.optim.step()
-            print(losses)
         return np.mean(losses)
