@@ -199,7 +199,6 @@ class TrainerAttn(object):
             print("*"*10, epoch, "*"*5)
             st = time.time()
             train_loss = self.train_epoch(epoch, batch_size)
-            print("train loss:", train_loss)
             loss, recall, mrr = self.evaluation.evalAttn(self.train_data, batch_size, debug=False)
             print("Train Epoch: {}, train loss: {:.4f},  loss: {:.4f}, recall: {:.4f}, mrr: {:.4f}, time: {}".format(epoch, train_loss, loss, recall, mrr, time.time() - st))
 
@@ -224,6 +223,7 @@ class TrainerAttn(object):
         torch.autograd.set_detect_anomaly(False)
 
         dataloader = self.train_data
+        print(dataloader)
         for input_x_batch, target_y_batch, idx_batch in dataloader:
             input_x_batch = input_x_batch.to(self.device)
             target_y_batch = target_y_batch.to(self.device)
@@ -241,4 +241,5 @@ class TrainerAttn(object):
             loss_batch.backward()
 
             self.optim.step()
+        print(losses)
         return np.mean(losses)
