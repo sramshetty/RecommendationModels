@@ -165,7 +165,7 @@ def main():
 
         loss_function = LossFunction(loss_type=args.loss_type, use_cuda=args.cuda)
 
-        trainer = TrainerAttn(model, train_data=train_data_loader, eval_data=valid_data_loader,
+        trainer = TrainerAttn(model=model, train_data=train_data_loader, eval_data=valid_data_loader,
                                   optim=optimizer,
                                   use_cuda=args.cuda,
                                   loss_func=loss_function,

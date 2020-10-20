@@ -185,7 +185,7 @@ class TrainerAttn(object):
         self.optim = optim
         self.loss_func = loss_func
         self.topk = topk
-        self.evaluation = Evaluation(self.model, self.loss_func, use_cuda, self.topk, warm_start=args.warm_start)
+        self.evaluation = Evaluation(log=None, model=self.model, loss_func=self.loss_func, use_cuda=use_cuda, k=self.topk, warm_start=args.warm_start)
         self.device = torch.device('cuda' if use_cuda else 'cpu')
         self.args = args
 
@@ -199,7 +199,6 @@ class TrainerAttn(object):
             print("*"*10, epoch, "*"*5)
             st = time.time()
             train_loss = self.train_epoch(epoch, batch_size)
-            print("found train loss", train_loss)
             loss, recall, mrr = self.evaluation.evalAttn(self.train_data, batch_size, debug=False)
             print("Train Epoch: {}, train loss: {:.4f},  loss: {:.4f}, recall: {:.4f}, mrr: {:.4f}, time: {}".format(epoch, train_loss, loss, recall, mrr, time.time() - st))
 
