@@ -141,7 +141,7 @@ class SelfAttention(nn.Module):
         try: ### last input
             trg = self.embed(src[:, -1]).unsqueeze(0) 
         except IndexError:
-            trg = self.embed(src).unsqueeze(0)
+            trg = self.embed(src[-1]).unsqueeze(0)
         d_output = self.decode(trg, x, x, src_mask)
     
         output = F.linear(d_output.squeeze(0), self.out_matrix)
