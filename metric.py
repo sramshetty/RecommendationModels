@@ -18,7 +18,7 @@ def get_recall(indices, targets, mask):
     hits *= mask.view(-1, 1).expand_as(indices)
     hits = hits.nonzero()
 
-    recall = float(hits.size(0)) / float( mask.int().sum() )
+    recall = float(hits.size(0)) / float( mask.int().sum() + .0001)
 
     return recall
 
