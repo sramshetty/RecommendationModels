@@ -125,7 +125,7 @@ def main():
     observed_threshold = args.test_observed
     
     train_data = dataset.DatasetAttn(train_data, data_name, observed_threshold, window_size)
-    valid_data = dataset.DatasetAttn(valid_data, data_name, observed_threshold, window_size, itemmap=train_data.m_itemmap)
+    valid_data = dataset.DatasetAttn(valid_data, data_name, observed_threshold, window_size, itemmap=train_data.items)
     test_data = dataset.DatasetAttn(test_data, data_name, observed_threshold, window_size)
     
     if not args.is_eval:
