@@ -112,7 +112,8 @@ class SelfAttention(nn.Module):
         
         self.device = torch.device('cuda' if use_cuda else 'cpu')
         print("Beginning")
-        self.embed = nn.Embedding(input_size, hidden_size, padding_idx=0).to(self.device)
+        self.embed = nn.Embedding(input_size, hidden_size, padding_idx=0)
+        self.embed = self.embed.to(self.device)
         print("Finshed Embedded")
         self.pe = PositionalEncoder(hidden_size) if position_embedding else None
         print("Finished Encoding inputs")
