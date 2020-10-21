@@ -225,7 +225,7 @@ class DatasetAttn(object):
 		for action_seq_arr in self.m_seq_list:
 
 			action_num_seq = len(action_seq_arr)
-
+			
 			if action_num_seq < window_size :
 				window_size = action_num_seq
 

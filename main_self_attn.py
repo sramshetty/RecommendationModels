@@ -134,6 +134,7 @@ def main():
     input_size = len(train_data.items)
     output_size = input_size
     print("input_size", input_size)
+    print("valid_size", len(valid_data))
 
     train_data_loader = dataset.DataLoaderAttn(train_data, args.batch_size)
     valid_data_loader = dataset.DataLoaderAttn(valid_data, args.batch_size)
