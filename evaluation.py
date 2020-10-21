@@ -97,6 +97,7 @@ class Evaluation(object):
 				target_y_batch = target_y_batch.to(self.device)
 				warm_start_mask = (idx_batch>=self.warm_start)
 
+				print(input_x_batch)
 				logit_batch = self.model(input_x_batch)
 				logit_sampled_batch = logit_batch[:, target_y_batch.view(-1)]
 

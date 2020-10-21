@@ -137,12 +137,10 @@ class SelfAttention(nn.Module):
         x = x.transpose(0,1)
         for i, layer in enumerate(self.encode_layers):
             x = layer(x, x, x, src_mask) ### encoded input sequence
-        print("src", src)
+            
         trg = self.embed(src[:, -1]).unsqueeze(0) ### last input
-        print("trg", trg)
         d_output = self.decode(trg, x, x, src_mask)
     
         output = F.linear(d_output.squeeze(0), self.out_matrix)
-        print("out", output)
         
         return output   
