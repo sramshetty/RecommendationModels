@@ -184,5 +184,6 @@ class Decoder(nn.Module):
         q = q + attn_output
         q = self.norm_2(q)
         q = q + self.ff(q)
-        q = self.norm_3(q)  
+        q = self.norm_3(q) 
+        print("decoder", q) 
         return q
