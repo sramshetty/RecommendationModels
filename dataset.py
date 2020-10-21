@@ -175,7 +175,7 @@ class DatasetAttn(object):
 			action_seq_arr_total = data_seq_arr
 
 		if data_name == "taobao":
-			action_seq_arr_total = data_seq_arr[:300]
+			action_seq_arr_total = data_seq_arr[:400]
 
 		seq_num = len(action_seq_arr_total)
 		print("seq num", seq_num)
@@ -292,14 +292,11 @@ class DataLoaderAttn():
 					y_batch.append(target_action_seq_list[seq_index])
 					idx_batch.append(input_seq_idx_list[seq_index])
 
-				print("before", x_batch)
 				x_batch, y_batch, idx_batch = self.batchifyData(x_batch, y_batch, idx_batch)
 
 				x_batch_tensor = torch.LongTensor(x_batch)
 				y_batch_tensor = torch.LongTensor(y_batch)
 				idx_batch_tensor = torch.LongTensor(idx_batch)
-
-				print(x_batch_tensor)
 
 				yield x_batch_tensor, y_batch_tensor, idx_batch_tensor
 
@@ -312,14 +309,14 @@ class DataLoaderAttn():
 			pad_input_action_seq_batch = np.zeros((batch_size, longest_len_batch))
 			pad_target_action_seq_batch = np.zeros(batch_size)
 			pad_idx_batch = np.zeros(batch_size)
-
+			print(pad_input_action_seq_batch)
 			zip_batch = sorted(zip(idx_batch, input_action_seq_batch, target_action_seq_batch), reverse=True)
 
 			for seq_i, (seq_idx, input_action_seq_i, target_action_seq_i) in enumerate(zip_batch):
 				pad_input_action_seq_batch[seq_i, 0:len(input_action_seq_i)] = input_action_seq_i
 				pad_target_action_seq_batch[seq_i] = target_action_seq_i
 				pad_idx_batch[seq_i] = seq_idx
-
+			print("after", pad_input_action_seq_batch)
 			### map item id back to start from 0
 			# target_action_seq_batch = [target_i-1 for target_i in target_action_seq_batch]
 
