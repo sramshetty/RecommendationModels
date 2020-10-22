@@ -286,7 +286,7 @@ class DataLoaderAttn():
 				idx_batch = []
 
 				for seq_index_batch in range(batch_size):
-					seq_index = batch_index*batch_size+seq_index_batch
+					seq_index = 15
 
 					x_batch.append(input_action_seq_list[seq_index])
 					y_batch.append(target_action_seq_list[seq_index])
@@ -305,7 +305,7 @@ class DataLoaderAttn():
 		def batchifyData(self, input_action_seq_batch, target_action_seq_batch, idx_batch):
 			longest_len_batch = max([len(seq_i) for seq_i in input_action_seq_batch])
 			batch_size = len(input_action_seq_batch)
-			print("longest_len", longest_len_batch)
+
 			pad_input_action_seq_batch = np.zeros((batch_size, longest_len_batch))
 			pad_target_action_seq_batch = np.zeros(batch_size)
 			pad_idx_batch = np.zeros(batch_size)
