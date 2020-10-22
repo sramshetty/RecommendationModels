@@ -305,19 +305,18 @@ class DataLoaderAttn():
 		def batchifyData(self, input_action_seq_batch, target_action_seq_batch, idx_batch):
 			longest_len_batch = max([len(seq_i) for seq_i in input_action_seq_batch])
 			batch_size = len(input_action_seq_batch)
-
+			print("longest_len", longest_len_batch)
 			pad_input_action_seq_batch = np.zeros((batch_size, longest_len_batch))
 			pad_target_action_seq_batch = np.zeros(batch_size)
 			pad_idx_batch = np.zeros(batch_size)
-
+			
 			zip_batch = sorted(zip(idx_batch, input_action_seq_batch, target_action_seq_batch), reverse=True)
-			print(zip_batch)
 
 			for seq_i, (seq_idx, input_action_seq_i, target_action_seq_i) in enumerate(zip_batch):
 				pad_input_action_seq_batch[seq_i, 0:len(input_action_seq_i)] = input_action_seq_i
 				pad_target_action_seq_batch[seq_i] = target_action_seq_i
 				pad_idx_batch[seq_i] = seq_idx
-			print("after", pad_input_action_seq_batch)
+
 			### map item id back to start from 0
 			# target_action_seq_batch = [target_i-1 for target_i in target_action_seq_batch]
 
