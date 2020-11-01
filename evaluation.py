@@ -6,16 +6,16 @@ import datetime
 import random
 
 class Evaluation(object):
-	def __init__(self, log, model, loss_func, use_cuda, k=20, warm_start=5):
-        self.model = model
-        self.train_data = train_data
-        self.eval_data = eval_data
-        self.optim = optim
-        self.loss_func = loss_func
-        self.topk = topk
-        self.evaluation = Evaluation(self.model, self.loss_func, use_cuda, self.topk, warm_start=args.warm_start)
-        self.device = torch.device('cuda' if use_cuda else 'cpu')
-        self.args = args
+	def __init__(self, model, train_data, eval_data, optim, use_cuda, loss_func, topk, args):
+		self.model = model
+		self.train_data = train_data
+		self.eval_data = eval_data
+		self.optim = optim
+		self.loss_func = loss_func
+		self.topk = topk
+		self.evaluation = Evaluation(self.model, self.loss_func, use_cuda, self.topk, warm_start=args.warm_start)
+		self.device = torch.device('cuda' if use_cuda else 'cpu')
+		self.args = args
 
 	def eval(self, eval_data, batch_size, train_test_flag):
 		self.model.eval()
