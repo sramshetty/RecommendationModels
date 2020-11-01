@@ -112,6 +112,7 @@ class Evaluation(object):
 				total_test_num.append(target_y_batch.view(-1).size(0))
 
 		mean_losses = np.mean(losses)
+		print(recalls)
 		mean_recall = np.average(recalls, weights=weights)
 		mean_mrr = np.average(mrrs, weights=weights)
 		#print(recalls, mrrs, weights)
