@@ -102,7 +102,8 @@ class Evaluation(object):
 				loss_batch = self.loss_func(logit_sampled_batch, target_y_batch)
 
 				losses.append(loss_batch.item())
-
+				
+				print("logit:" , logit_batch, "target:", target_y_batch)
 				recall_batch, mrr_batch = evaluate(logit_batch, target_y_batch, warm_start_mask, k=self.topk, debug=debug)
 
 				weights.append( int( warm_start_mask.int().sum() ) )
@@ -112,7 +113,6 @@ class Evaluation(object):
 				total_test_num.append(target_y_batch.view(-1).size(0))
 
 		mean_losses = np.mean(losses)
-		print(recalls)
 		mean_recall = np.average(recalls, weights=weights)
 		mean_mrr = np.average(mrrs, weights=weights)
 		#print(recalls, mrrs, weights)
