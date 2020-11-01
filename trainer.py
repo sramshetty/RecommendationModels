@@ -185,7 +185,7 @@ class TrainerAttn(object):
         self.optim = optim
         self.loss_func = loss_func
         self.topk = topk
-        self.evaluation = Evaluation(log=None, model=self.model, loss_func=self.loss_func, use_cuda=use_cuda, k=self.topk, warm_start=args.warm_start)
+        self.evaluation = Evaluation(model=self.model, loss_func=self.loss_func, use_cuda=use_cuda, k=self.topk, warm_start=args.warm_start)
         self.device = torch.device('cuda' if use_cuda else 'cpu')
         self.args = args
 
