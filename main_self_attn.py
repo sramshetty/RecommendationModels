@@ -137,6 +137,7 @@ def main():
 
     train_data_loader = dataset.DataLoaderAttn(train_data, args.batch_size)
     valid_data_loader = dataset.DataLoaderAttn(valid_data, args.batch_size)
+    test_data_loader = dataset.DataLoaderAttn(test_data, args.batch_size)
 
     if not args.is_eval:
         model = SelfAttention(input_size, args.hidden_size, output_size,
@@ -165,7 +166,7 @@ def main():
 
         loss_function = LossFunction(loss_type=args.loss_type, use_cuda=args.cuda)
 
-        trainer = TrainerAttn(model=model, train_data=train_data_loader, eval_data=valid_data_loader,
+        trainer = TrainerAttn(model=model, train_data=train_data_loader, eval_data=test_data_loader,
                                   optim=optimizer,
                                   use_cuda=args.cuda,
                                   loss_func=loss_function,
