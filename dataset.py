@@ -292,7 +292,7 @@ class DataLoaderAttn():
 					y_batch.append(target_action_seq_list[seq_index])
 					idx_batch.append(input_seq_idx_list[seq_index])
 
-				x_batch, y_batch, idx_batch = self.batchifyData(x_batch, y_batch, idx_batch)
+				#x_batch, y_batch, idx_batch = self.batchifyData(x_batch, y_batch, idx_batch)
 
 				x_batch_tensor = torch.LongTensor(x_batch)
 				y_batch_tensor = torch.LongTensor(y_batch)
