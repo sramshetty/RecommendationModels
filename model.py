@@ -186,3 +186,20 @@ class Decoder(nn.Module):
         q = q + self.ff(q)
         q = self.norm_3(q) 
         return q
+
+class Transformer(nn.Module):
+    def __init__(self, d_model, heads, dropout = 0.5):
+        super().__init__()
+        
+        self.attn = nn.MultiheadAttention(d_model, heads, dropout=dropout)
+        self.norm_1 = nn.LayerNorm(d_model)
+        self.norm_2 = nn.LayerNorm(d_model)
+        self.ff = FeedForward(d_model)
+        
+    def forward(self, q, k, v, mask):
+        attn_output, attn_output_weights = self.attn(q, k, v, key_padding_mask=mask)
+        q = q + attn_output
+        q = self.norm_1(q)
+        q = q + self.ff(q)
+        q = self.norm_2(q)  
+        return q
