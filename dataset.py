@@ -286,7 +286,7 @@ class DataLoaderAttn():
 				idx_batch = []
 
 				for seq_index_batch in range(batch_size):
-					seq_index = 15
+					seq_index = batch_index*batch_size+seq_index_batch
 
 					x_batch.append(input_action_seq_list[seq_index])
 					y_batch.append(target_action_seq_list[seq_index])
