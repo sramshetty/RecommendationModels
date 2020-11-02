@@ -103,7 +103,7 @@ class Evaluation(object):
 
 				losses.append(loss_batch.item())
 				
-				recall_batch, mrr_batch = evaluate(logit_sampled_batch, target_y_batch, warm_start_mask, k=self.topk, debug=debug)
+				recall_batch, mrr_batch = evaluate(logit_batch, target_y_batch, warm_start_mask, k=self.topk, debug=debug)
 
 				weights.append( int( warm_start_mask.int().sum() ) )
 				recalls.append(recall_batch)
