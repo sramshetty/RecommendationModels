@@ -177,10 +177,10 @@ class Decoder(nn.Module):
         self.ff = FeedForward(d_model)
 
     def forward(self, q, k, v, mask):
-        attn_output, attn_output_weights = self.mask_attn(q, k, v)
+        attn_output, attn_output_weights = self.mask_attn(q, k, v, key_padding_mask=mask)
         q = q + attn_output
         q = self.norm_1(q)
-        attn_output, attn_output_weights = self.attn(q, k, v, key_padding_mask=mask)
+        attn_output, attn_output_weights = self.attn(q, k, v)
         q = q + attn_output
         q = self.norm_2(q)
         q = q + self.ff(q)
