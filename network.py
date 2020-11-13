@@ -153,9 +153,12 @@ class SelfAttention(nn.Module):
         
         self.embed = nn.Embedding(input_size, hidden_size, padding_idx=0).to(self.device)
         self.pe = PositionalEncoder(hidden_size) if position_embedding else None
-        self.encode_layers = nn.ModuleList([Transformer(hidden_size, num_heads, dropout=dropout_hidden) for i in range(num_layers)])
+        self.attn_blocks = nn.ModuleList([Transformer(hidden_size, num_heads, dropout=dropout_hidden) for i in range(num_layers)])
         self.decode = Transformer(hidden_size, num_heads, dropout=dropout_hidden)
-        
+        self.dropout = nn.Dropout(dropout_hidden)
+
+        self.final_norm = nn.LayerNorm(hidden_size)
+
         if shared_embedding:
             self.out_matrix = self.embed.weight.to(self.device)
         else:
@@ -163,18 +166,32 @@ class SelfAttention(nn.Module):
         
         self = self.to(self.device)
 
-    def forward(self, src):
-        x = self.embed(src)
-        src_mask = (src == 0)
-        if self.pe != None:
-            x = self.pe(x)
+    def log2feats(self, log_seqs):
+        seqs = self.embed(log_seqs)
+        seqs *= self.embed.embedding_dim ** 0.5
+        positions = np.tile(np.array(range(log_seqs.shape[1])), [log_seqs.shape[0], 1])
+        seqs += self.pe(positions)
+        seqs = self.dropout(seqs)
 
-        x = x.transpose(0,1)
+        src_mask = (log_seqs == 0)
+        tl = seqs.shape[1]
+
+        seqs = seqs.transpose(0,1)
         for i, layer in enumerate(self.encode_layers):
-            x = layer(x, x, x, src_mask) ### encoded input sequence
+            seqs = layer(seqs, seqs, seqs, src_mask) ### encoded input sequence
+
+        log_feats = self.final_norm(seqs)
+
+        return log_feats
+
+    def forward(self, src):
+        log_feats = self.log2feats(src)
+
+        final_feat = log_feats[:, -1, :]
         
-        trg = self.embed(src[:, -1]).unsqueeze(0)  ### last input
-        d_output = self.decode(trg, x, x, src_mask)
+        src_mask = (log_feats == 0)
+        trg = self.embed(src[:, -1]).unsqueeze(0)### last input
+        d_output = self.decode(trg, final_feat, final_feat, src_mask)
     
         output = F.linear(d_output.squeeze(0), self.out_matrix)
         

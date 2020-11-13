@@ -135,57 +135,58 @@ class FeedForward(nn.Module):
     def __init__(self, d_model, d_ff=128, dropout = 0.5):
         super().__init__() 
 
-        self.linear_1 = nn.Linear(d_model, d_ff)
-        self.linear_2 = nn.Linear(d_ff, d_model)
+        self.conv_1 = nn.Conv1d(d_model, d_ff, 1)
+        self.conv_2 = nn.Conv1d(d_model, d_ff, 1)
         self.dropout = nn.Dropout(dropout)
 
-    def forward(self, x):
-        x = self.dropout(nn.functional.relu(self.linear_1(x)))
-        x = self.linear_2(x)
-        return x
+    def forward(self, inputs):
+        outputs = self.dropout(nn.functional.relu(self.conv_1(inputs)))
+        outputs = self.dropout(self.conv_2(outputs))
+        outputs += inputs
+        return outputs
 
 
-class Encoder(nn.Module):
+# class Encoder(nn.Module):
 
-    def __init__(self, d_model, heads, dropout = 0.5):
-        super().__init__()
+#     def __init__(self, d_model, heads, dropout = 0.5):
+#         super().__init__()
         
-        self.attn = nn.MultiheadAttention(d_model, heads, dropout=dropout)
-        self.norm_1 = nn.LayerNorm(d_model)
-        self.norm_2 = nn.LayerNorm(d_model)
-        self.ff = FeedForward(d_model)
+#         self.attn = nn.MultiheadAttention(d_model, heads, dropout=dropout)
+#         self.norm_1 = nn.LayerNorm(d_model)
+#         self.norm_2 = nn.LayerNorm(d_model)
+#         self.ff = FeedForward(d_model)
         
-    def forward(self, q, k, v, mask):
-        attn_output, attn_output_weights = self.attn(q, k, v, key_padding_mask=mask)
-        q = q + attn_output
-        q = self.norm_1(q)
-        q = q + self.ff(q)
-        q = self.norm_2(q)  
-        return q
+#     def forward(self, q, k, v, mask):
+#         attn_output, attn_output_weights = self.attn(q, k, v, key_padding_mask=mask)
+#         q = q + attn_output
+#         q = self.norm_1(q)
+#         q = q + self.ff(q)
+#         q = self.norm_2(q)  
+#         return q
 
 
-class Decoder(nn.Module):
+# class Decoder(nn.Module):
 
-    def __init__(self, d_model, heads, dropout=0.5):
-        super().__init__()
+#     def __init__(self, d_model, heads, dropout=0.5):
+#         super().__init__()
         
-        self.mask_attn = nn.MultiheadAttention(d_model, heads, dropout=dropout)
-        self.attn = nn.MultiheadAttention(d_model, heads, dropout=dropout)
-        self.norm_1 = nn.LayerNorm(d_model)
-        self.norm_2 = nn.LayerNorm(d_model)
-        self.norm_3 = nn.LayerNorm(d_model)
-        self.ff = FeedForward(d_model)
+#         self.mask_attn = nn.MultiheadAttention(d_model, heads, dropout=dropout)
+#         self.attn = nn.MultiheadAttention(d_model, heads, dropout=dropout)
+#         self.norm_1 = nn.LayerNorm(d_model)
+#         self.norm_2 = nn.LayerNorm(d_model)
+#         self.norm_3 = nn.LayerNorm(d_model)
+#         self.ff = FeedForward(d_model)
 
-    def forward(self, q, k, v, mask):
-        attn_output, attn_output_weights = self.mask_attn(q, k, v, key_padding_mask=mask)
-        q = q + attn_output
-        q = self.norm_1(q)
-        attn_output, attn_output_weights = self.attn(q, k, v)
-        q = q + attn_output
-        q = self.norm_2(q)
-        q = q + self.ff(q)
-        q = self.norm_3(q) 
-        return q
+#     def forward(self, q, k, v, mask):
+#         attn_output, attn_output_weights = self.mask_attn(q, k, v, key_padding_mask=mask)
+#         q = q + attn_output
+#         q = self.norm_1(q)
+#         attn_output, attn_output_weights = self.attn(q, k, v)
+#         q = q + attn_output
+#         q = self.norm_2(q)
+#         q = q + self.ff(q)
+#         q = self.norm_3(q) 
+#         return q
 
 class Transformer(nn.Module):
     def __init__(self, d_model, heads, dropout = 0.5):
@@ -197,9 +198,8 @@ class Transformer(nn.Module):
         self.ff = FeedForward(d_model)
         
     def forward(self, q, k, v, mask):
-        attn_output, attn_output_weights = self.attn(q, k, v, key_padding_mask=mask)
+        attn_output, attn_output_weights = self.attn(self.norm_1(q), k, v, key_padding_mask=mask)
         q = q + attn_output
-        q = self.norm_1(q)
-        q = q + self.ff(q)
-        q = self.norm_2(q)  
+        q = self.norm_2(q)
+        q = self.ff(q)
         return q
