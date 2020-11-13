@@ -3,7 +3,7 @@ import torch
 import torch.nn.functional as F
 import datetime
 import numpy as np
-from model import PositionalEncoder, FeedForward, Encoder, Decoder, Transformer 
+from model import PositionalEncoder, FeedForward, Transformer 
 
 class GRU4REC(nn.Module):
     def __init__(self, log, ss, input_size, hidden_size, output_size, num_layers=1, final_act='tanh', dropout_hidden=.8, dropout_input=0, embedding_dim=-1, use_cuda=False, shared_embedding=True):
