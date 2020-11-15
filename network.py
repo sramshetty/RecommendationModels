@@ -191,7 +191,7 @@ class SASRec(nn.Module):
         final_feat = log_feats[:, -1, :]
         
         src_mask = (log_feats == 0)
-        trg = self.embed(src[:, -1]).unsqueeze(0)
+        trg = self.embed(src[:, -1]).unsqueeze(1)
         d_output = self.decode(trg, final_feat, final_feat, src_mask)
     
         output = F.linear(d_output.squeeze(0), self.out_matrix)
