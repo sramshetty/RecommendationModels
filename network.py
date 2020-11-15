@@ -171,7 +171,7 @@ class SASRec(nn.Module):
         seqs = self.embed(log_seqs)
         seqs *= self.embed.embedding_dim ** 0.5
         positions = np.tile(np.array(range(log_seqs.shape[1])), [log_seqs.shape[0], 1])
-        seqs += self.pe(positions)
+        seqs += self.pe(torch.LongTensor(positions)).to(self.device)
         seqs = self.dropout(seqs)
 
         src_mask = (log_seqs == 0)
