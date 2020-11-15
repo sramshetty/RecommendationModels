@@ -137,11 +137,12 @@ class FeedForward(nn.Module):
 
         self.conv_1 = nn.Conv1d(d_model, d_ff, 1)
         self.conv_2 = nn.Conv1d(d_model, d_ff, 1)
-        self.dropout = nn.Dropout(dropout)
+        self.dropout1 = nn.Dropout(dropout)
+        self.dropout2 = nn.Dropout(dropout)
 
     def forward(self, inputs):
-        outputs = self.dropout(nn.functional.relu(self.conv_1(inputs.transpose(-1, -2))))
-        outputs = self.dropout(self.conv_2(outputs))
+        outputs = self.dropout1(nn.functional.relu(self.conv_1(inputs.transpose(-1, -2))))
+        outputs = self.dropout2(self.conv_2(outputs))
         outputs = outputs.transpose(-1, -2)
         outputs += inputs
         return outputs
