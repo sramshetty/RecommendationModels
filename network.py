@@ -178,7 +178,7 @@ class SASRec(nn.Module):
         seqs *= ~src_mask.unsqueeze(-1)
 
         tl = seqs.shape[1]
-        attention_mask = ~torch.tril(torch.ones((tl, tl), dtype=torch.bool, device=self.dev))
+        attention_mask = ~torch.tril(torch.ones((tl, tl), dtype=torch.bool, device=self.device))
 
         for i, layer in enumerate(self.attn_blocks):
             seqs = seqs.transpose(0,1)
