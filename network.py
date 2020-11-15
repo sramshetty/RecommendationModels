@@ -198,6 +198,6 @@ class SASRec(nn.Module):
         
         item_embs = self.embed(src[:, -1]).unsqueeze(0) # (U, I, C)
 
-        logits = item_embs.matmul(final_feat.unsqueeze(-1)).squeeze(-1)
+        logits = item_embs.matmul(final_feat.unsqueeze(-1)).squeeze(1)
 
         return logits
