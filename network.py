@@ -183,6 +183,7 @@ class SASRec(nn.Module):
         for i, block in enumerate(self.attn_blocks):
             seqs = seqs.transpose(0,1)
             seqs = block(seqs, seqs, seqs, attention_mask) ### encoded input sequence
+            seqs = seqs.transpose(0, 1)
             seqs *= ~src_mask.unsqueeze(-1)
 
         log_feats = self.final_norm(seqs)

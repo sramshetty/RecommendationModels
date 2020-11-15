@@ -201,7 +201,6 @@ class Transformer(nn.Module):
     def forward(self, q, k, v, mask):
         attn_output, attn_output_weights = self.attn(self.norm_1(q), k, v, attn_mask=mask)
         q = q + attn_output
-        q = q.transpose(0, 1)
         q = self.norm_2(q)
         q = self.ff(q)
         return q
