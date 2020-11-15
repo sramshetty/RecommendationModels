@@ -178,12 +178,11 @@ class SASRec(nn.Module):
         seqs *= ~src_mask.unsqueeze(-1)
 
         tl = seqs.shape[1]
-        attention_mask = ~torch.tril(torch.ones((seqs.shape), dtype=torch.bool, device=self.device))
+        attention_mask = ~torch.tril(torch.ones((tl, tl), dtype=torch.bool, device=self.device))
 
         for i, block in enumerate(self.attn_blocks):
             seqs = seqs.transpose(0,1)
             seqs = block(seqs, seqs, seqs, attention_mask) ### encoded input sequence
-            seqs = seqs.transpose(0, 1)
             seqs *= ~src_mask.unsqueeze(-1)
 
         log_feats = self.final_norm(seqs)
