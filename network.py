@@ -175,11 +175,15 @@ class SASRec(nn.Module):
         seqs = self.dropout(seqs)
 
         src_mask = (log_seqs == 0)
-        tl = seqs.shape[1]
+        seqs *= ~src_mask.unsqueeze(-1)
 
-        seqs = seqs.transpose(0,1)
+        tl = seqs.shape[1]
+        attention_mask = ~torch.tril(torch.ones((tl, tl), dtype=torch.bool, device=self.dev))
+
         for i, layer in enumerate(self.attn_blocks):
-            seqs = layer(seqs, seqs, seqs, src_mask) ### encoded input sequence
+            seqs = seqs.transpose(0,1)
+            seqs = layer(seqs, seqs, seqs, attention_mask) ### encoded input sequence
+            seqs *= ~src_mask.unsqueeze(-1)
 
         log_feats = self.final_norm(seqs)
 
