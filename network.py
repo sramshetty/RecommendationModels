@@ -187,5 +187,6 @@ class SASRec(nn.Module):
 
     def forward(self, src):
         log_feats = self.log2feats(src)
+        print("log", log_feats, "\nsrc", src)
         
         return log_feats
