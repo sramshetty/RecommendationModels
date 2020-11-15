@@ -175,9 +175,9 @@ class DatasetAttn(object):
 			action_seq_arr_total = data_seq_arr
 
 		if data_name == "taobao":
-			action_seq_arr_total = data_seq_arr
+			action_seq_arr_total = data_seq_arr[:500]
 
-		seq_num = len(action_seq_arr_total)-50000
+		seq_num = len(action_seq_arr_total)
 		print("seq num", seq_num)
 
 		seq_len_list = []
