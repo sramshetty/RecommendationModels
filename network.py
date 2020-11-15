@@ -196,8 +196,8 @@ class SASRec(nn.Module):
         print("log", log_feats.size(), "\nsrc", src.size())
         final_feat = log_feats[:, -1, :]
         
-        item_embs = self.embed(src) # (U, I, C)
+        item_embs = self.embed(src[:, -1]).unsqueeze(0) # (U, I, C)
 
-        logits = item_embs.matmul(final_feat.unsqueeze(-1)).squeeze(-1)
+        logits = item_embs.matmul(final_feat.unsqueeze(-1)).squueze(-1)
 
         return logits
