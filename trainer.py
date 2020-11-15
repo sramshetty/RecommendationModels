@@ -228,7 +228,8 @@ class TrainerAttn(object):
             target_y_batch = target_y_batch.to(self.device)
 
             self.optim.zero_grad()
-
+        
+            print(idx_batch)
             logit_batch = self.model(input_x_batch)
 
             ### batch_size*batch_size
