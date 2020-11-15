@@ -186,21 +186,6 @@ class SASRec(nn.Module):
         return log_feats
 
     def forward(self, src):
-        log_feats = log2feats(src)
-        print("log", log_feats, "\nsrc", src)
-        x = self.embed(src)
-        src_mask = (src == 0)
-        if self.pe != None:
-            x = self.pe(x)
-
-        x = x.transpose(0,1)
-        for i, layer in enumerate(self.encode_layers):
-            x = layer(x, x, x, src_mask) ### encoded input sequence
+        log_feats = self.log2feats(src)
         
-        trg = self.embed(src[:, -1]).unsqueeze(0)  ### last input
-        d_output = self.decode(trg, x, x, src_mask)
-#         d_output, _ = self.attn(trg, x, x, src_mask)
-    
-        output = F.linear(d_output.squeeze(0), self.out_matrix)
-        
-        return output
+        return log_feats
