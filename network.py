@@ -197,7 +197,7 @@ class SASRec(nn.Module):
         final_feat = log_feats[:, -1, :]
 
         item_embs = self.embed(torch.LongTensor(self.out_matrix).to(self.dev)) # (U, I, C)
-
+        print(item_embs)
         logits = item_embs.matmul(final_feat.unsqueeze(-1))
 
         print(logits.size())
