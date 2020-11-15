@@ -185,29 +185,20 @@ class SASRec(nn.Module):
 
         return log_feats
 
-    def forward(self, user_ids, log_seqs, pos_seqs, neg_seqs): # for training        
-        log_feats = self.log2feats(log_seqs) # user_ids hasn't been used yet
+    def forward(self, src):
+        x = self.embed(src)
+        src_mask = (src == 0)
+        if self.pe != None:
+            x = self.pe(x)
 
-        pos_embs = self.item_emb(torch.LongTensor(pos_seqs).to(self.dev))
-        neg_embs = self.item_emb(torch.LongTensor(neg_seqs).to(self.dev))
-
-        pos_logits = (log_feats * pos_embs).sum(dim=-1)
-        neg_logits = (log_feats * neg_embs).sum(dim=-1)
-
-        # pos_pred = self.pos_sigmoid(pos_logits)
-        # neg_pred = self.neg_sigmoid(neg_logits)
-
-        return pos_logits, neg_logits # pos_pred, neg_pred
-
-    def predict(self, user_ids, log_seqs, item_indices): # for inference
-        log_feats = self.log2feats(log_seqs) # user_ids hasn't been used yet
-
-        final_feat = log_feats[:, -1, :] # only use last QKV classifier, a waste
-
-        item_embs = self.item_emb(torch.LongTensor(item_indices).to(self.dev)) # (U, I, C)
-
-        logits = item_embs.matmul(final_feat.unsqueeze(-1)).squeeze(-1)
-
-        # preds = self.pos_sigmoid(logits) # rank same item list for different users
-
-        return logits # preds # (U, I)
+        x = x.transpose(0,1)
+        for i, layer in enumerate(self.encode_layers):
+            x = layer(x, x, x, src_mask) ### encoded input sequence
+        
+        trg = self.embed(src[:, -1]).unsqueeze(0)  ### last input
+        d_output = self.decode(trg, x, x, src_mask)
+#         d_output, _ = self.attn(trg, x, x, src_mask)
+    
+        output = F.linear(d_output.squeeze(0), self.out_matrix)
+        
+        return output

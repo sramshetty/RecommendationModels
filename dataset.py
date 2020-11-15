@@ -163,7 +163,6 @@ class DatasetAttn(object):
 
 		action_seq_arr_total = None
 		data_seq_arr = pickle.load(data_file)
-		print(data_seq_arr[:200])
 
 		if data_name == "movielen_itemmap":
 			action_seq_arr_total = data_seq_arr['action_list']
