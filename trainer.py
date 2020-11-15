@@ -229,7 +229,7 @@ class TrainerAttn(object):
 
             self.optim.zero_grad()
         
-            print(idx_batch)
+            print(1)
             logit_batch = self.model(input_x_batch)
 
             ### batch_size*batch_size
