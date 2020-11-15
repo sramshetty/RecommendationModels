@@ -155,7 +155,7 @@ class SASRec(nn.Module):
         self.embed = nn.Embedding(input_size, hidden_size, padding_idx=0).to(self.device)
         self.pe = torch.nn.Embedding(80, hidden_size) if position_embedding else None
         self.attn_blocks = nn.ModuleList([Transformer(hidden_size, num_heads, dropout=dropout_hidden) for i in range(num_layers)])
-        self.decode = Transformer(hidden_size, num_heads, dropout=dropout_hidden)
+        self.attn_norms = nn.ModuleList([nn.LayerNorm(hidden_size) for i in range(num_layers)])
         self.dropout = nn.Dropout(dropout_hidden)
 
         self.final_norm = nn.LayerNorm(hidden_size)
@@ -182,7 +182,8 @@ class SASRec(nn.Module):
 
         for i, block in enumerate(self.attn_blocks):
             seqs = seqs.transpose(0,1)
-            seqs = block(seqs, seqs, seqs, attention_mask) ### encoded input sequence
+            q = self.attn_norms[i](seqs)
+            seqs = block(q, seqs, seqs, attention_mask) ### encoded input sequence
             seqs *= ~src_mask.unsqueeze(-1)
 
         log_feats = self.final_norm(seqs)
