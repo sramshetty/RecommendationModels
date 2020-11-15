@@ -178,7 +178,7 @@ class SASRec(nn.Module):
         tl = seqs.shape[1]
 
         seqs = seqs.transpose(0,1)
-        for i, layer in enumerate(self.encode_layers):
+        for i, layer in enumerate(self.attn_blocks):
             seqs = layer(seqs, seqs, seqs, src_mask) ### encoded input sequence
 
         log_feats = self.final_norm(seqs)
