@@ -140,7 +140,7 @@ class FeedForward(nn.Module):
         self.dropout = nn.Dropout(dropout)
 
     def forward(self, inputs):
-        outputs = self.dropout(nn.functional.relu(self.conv_1(inputs)))
+        outputs = self.dropout(nn.functional.relu(self.conv_1(inputs.transpose(-1, -2))))
         outputs = self.dropout(self.conv_2(outputs))
         outputs = outputs.transpose(-1, -2)
         outputs += inputs
