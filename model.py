@@ -196,7 +196,7 @@ class Transformer(nn.Module):
         
         self.attn = nn.MultiheadAttention(d_model, heads, dropout=dropout)
         self.norm_1 = nn.LayerNorm(d_model)
-        self.ff = FeedForward(d_model)
+        self.ff = FeedForward(d_model, 32)
         
     def forward(self, q, k, v, mask):
         attn_output, attn_output_weights = self.attn(q, k, v, attn_mask=mask)
