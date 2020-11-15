@@ -10,7 +10,7 @@ from model import *
 from optimizer import *
 from trainer import *
 from torch.utils import data
-from network import SelfAttention
+from network import SelfAttention, SASRec
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--hidden_size', default=50, type=int)
@@ -140,7 +140,7 @@ def main():
     test_data_loader = dataset.DataLoaderAttn(test_data, args.batch_size)
 
     if not args.is_eval:
-        model = SelfAttention(input_size, args.hidden_size, output_size,
+        model = SASRec(input_size, args.hidden_size, output_size,
                                                 num_layers=args.num_layers,
                                                 num_heads=args.num_heads,
                                                 use_cuda=args.cuda,
