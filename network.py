@@ -180,9 +180,9 @@ class SASRec(nn.Module):
         tl = seqs.shape[1]
         attention_mask = ~torch.tril(torch.ones((tl, tl), dtype=torch.bool, device=self.device))
 
-        for i, layer in enumerate(self.attn_blocks):
+        for i, block in enumerate(self.attn_blocks):
             seqs = seqs.transpose(0,1)
-            seqs = layer(seqs, seqs, seqs, attention_mask) ### encoded input sequence
+            seqs = block(seqs, seqs, seqs, attention_mask) ### encoded input sequence
             seqs *= ~src_mask.unsqueeze(-1)
 
         log_feats = self.final_norm(seqs)
