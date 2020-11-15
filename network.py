@@ -196,8 +196,6 @@ class SASRec(nn.Module):
         print("log", log_feats.size(), "\nsrc", src.size())
         final_feat = log_feats[:, -1, :]
 
-        logits = self.out_matrix.matmul(final_feat.unsqueeze(-1))
-
-        print(logits.size())
+        logits = self.out_matrix.matmul(final_feat.unsqueeze(-1)).squeeze(-1)
 
         return logits
