@@ -191,9 +191,7 @@ class SASRec(nn.Module):
         return log_feats
 
     def forward(self, src):
-        print("forward")
         log_feats = self.log2feats(src)
-        print("log", log_feats.size(), "\nsrc", src.size())
         final_feat = log_feats[:, -1, :]
 
         logits = self.out_matrix.matmul(final_feat.unsqueeze(-1)).squeeze(-1)
