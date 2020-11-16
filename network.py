@@ -189,6 +189,6 @@ class SASRec(nn.Module):
         trg = self.embed(log_seqs[:, -1]).unsqueeze(0) ### last input
         d_output = self.decode(trg, seqs, seqs, src_mask)
 
-        output = F.linear(d_output.squeeze(0), self.out_matrix)
+        output = F.matmul(d_output.squeeze(0), self.out_matrix)
 
         return output   
