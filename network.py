@@ -155,6 +155,7 @@ class SASRec(nn.Module):
         self.embed = nn.Embedding(input_size, hidden_size, padding_idx=0).to(self.device)
         self.pe = torch.nn.Embedding(80, hidden_size) if position_embedding else None
         self.attn_blocks = nn.ModuleList([Transformer(hidden_size, num_heads, dropout=dropout_hidden) for i in range(num_layers)])
+        self.decode = Transformer(hidden_size, num_heads, dropout=dropout_hidden)
         self.attn_norms = nn.ModuleList([nn.LayerNorm(hidden_size) for i in range(num_layers)])
         self.dropout = nn.Dropout(dropout_hidden)
 
@@ -167,11 +168,10 @@ class SASRec(nn.Module):
         
         self = self.to(self.device)
 
-    def log2feats(self, log_seqs):
+    def forward(self, log_seqs):
         seqs = self.embed(log_seqs)
-        seqs *= self.embed.embedding_dim ** 0.5
-        positions = np.tile(np.array(range(log_seqs.shape[1])), [log_seqs.shape[0], 1])
-        seqs += self.pe(torch.LongTensor(positions).to(self.device))
+        if self.pe != None:
+            seqs = self.pe(seqs)
         seqs = self.dropout(seqs)
 
         src_mask = (log_seqs == 0)
@@ -186,16 +186,9 @@ class SASRec(nn.Module):
             seqs = block(q, seqs, seqs, attention_mask) ### encoded input sequence
             seqs *= ~src_mask.unsqueeze(-1)
 
-        log_feats = self.final_norm(seqs)
+        trg = self.embed(log_seqs[:, -1]).unsqueeze(0) ### last input
+        d_output = self.decode(trg, seqs, seqs, src_mask)
 
-        return log_feats
+        output = F.linear(d_output.squeeze(0), self.out_matrix)
 
-    def forward(self, src):
-        log_feats = self.log2feats(src)
-        final_feat = log_feats[:, -1, :]
-
-        item_embs = self.embed().unsqueeze(0)
-
-        logits = self.out_matrix.matmul(final_feat.unsqueeze(-1)).squeeze(-1)
-
-        return logits
+        return output   
