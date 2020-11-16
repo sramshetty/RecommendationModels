@@ -140,7 +140,7 @@ def main():
     test_data_loader = dataset.DataLoaderAttn(test_data, args.batch_size)
 
     if not args.is_eval:
-        model = SelfAttention(input_size, args.hidden_size, output_size,
+        model = SASRec(input_size, args.hidden_size, output_size,
                                                 num_layers=args.num_layers,
                                                 num_heads=args.num_heads,
                                                 use_cuda=args.cuda,
