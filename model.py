@@ -199,7 +199,7 @@ class Transformer(nn.Module):
         self.ff = FeedForward(d_model)
         
     def forward(self, q, k, v, mask):
-        attn_output, attn_output_weights = self.attn(q, k, v, attn_mask=mask)
+        attn_output, attn_output_weights = self.attn(q, k, v, key_padding_mask=mask)
         q = q + attn_output
         q = q.transpose(0,1)
         q = self.norm_1(q)
