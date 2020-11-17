@@ -3,7 +3,7 @@ import time
 import torch
 import argparse
 
-from network import SASRec
+from network import SASRec, SASRecPM
 from tqdm import tqdm
 from utils_SASRec import *
 
@@ -47,7 +47,7 @@ def main():
     f = open(os.path.join(args.dataset + '_' + args.train_dir, 'log.txt'), 'w')
 
     sampler = WarpSampler(user_train, usernum, itemnum, batch_size=args.batch_size, maxlen=args.maxlen, n_workers=3)
-    model = SASRec(usernum, itemnum, args).to(args.device) # no ReLU activation in original SASRec implementation?
+    model = SASRecPM(usernum, itemnum, args).to(args.device) # no ReLU activation in original SASRec implementation?
 
     for name, param in model.named_parameters():
         try:

@@ -145,7 +145,7 @@ class SelfAttention(nn.Module):
 
         return output   
 
-
+#My SASRec implementation
 class SASRec(nn.Module):
     def __init__(self, input_size, hidden_size, output_size, num_layers=1, num_heads=1, use_cuda=True, batch_size=50, dropout_input=0, dropout_hidden=0.5, embedding_dim=-1, position_embedding=False, shared_embedding=True):
         super().__init__()
@@ -190,6 +190,87 @@ class SASRec(nn.Module):
 
         return log_feats
 
+    def forward(self, src):
+        log_feats = self.log2feats(src)
+        final_feat = log_feats[:, -1, :]
+
+        logits = self.out_matrix.matmul(final_feat.unsqueeze(-1)).squeeze(-1)
+
+        return logits
+
+
+ 
+ # https://github.com/pmixer/SASRec.pytorch/blob/master/model.py
+class SASRecPM(torch.nn.Module):
+    def __init__(self, user_num, item_num, args):
+        super(SASRec, self).__init__()
+
+        self.user_num = user_num
+        self.item_num = item_num
+        self.dev = args.device
+
+        # TODO: loss += args.l2_emb for regularizing embedding vectors during training
+        # https://stackoverflow.com/questions/42704283/adding-l1-l2-regularization-in-pytorch
+        self.item_emb = torch.nn.Embedding(self.item_num+1, args.hidden_units, padding_idx=0)
+        self.pos_emb = torch.nn.Embedding(args.maxlen, args.hidden_units) # TO IMPROVE
+        self.emb_dropout = torch.nn.Dropout(p=args.dropout_rate)
+
+        self.attention_layernorms = torch.nn.ModuleList() # to be Q for self-attention
+        self.attention_layers = torch.nn.ModuleList()
+        self.forward_layernorms = torch.nn.ModuleList()
+        self.forward_layers = torch.nn.ModuleList()
+
+        self.last_layernorm = torch.nn.LayerNorm(args.hidden_units, eps=1e-8)
+
+        for _ in range(args.num_blocks):
+            new_attn_layernorm = torch.nn.LayerNorm(args.hidden_units, eps=1e-8)
+            self.attention_layernorms.append(new_attn_layernorm)
+
+            new_attn_layer =  torch.nn.MultiheadAttention(args.hidden_units,
+                                                            args.num_heads,
+                                                            args.dropout_rate)
+            self.attention_layers.append(new_attn_layer)
+
+            new_fwd_layernorm = torch.nn.LayerNorm(args.hidden_units, eps=1e-8)
+            self.forward_layernorms.append(new_fwd_layernorm)
+
+            new_fwd_layer = PointWiseFeedForward(args.hidden_units, args.dropout_rate)
+            self.forward_layers.append(new_fwd_layer)
+
+            # self.pos_sigmoid = torch.nn.Sigmoid()
+            # self.neg_sigmoid = torch.nn.Sigmoid()
+
+    def log2feats(self, log_seqs):
+        seqs = self.item_emb(torch.LongTensor(log_seqs).to(self.dev))
+        seqs *= self.item_emb.embedding_dim ** 0.5
+        positions = np.tile(np.array(range(log_seqs.shape[1])), [log_seqs.shape[0], 1])
+        seqs += self.pos_emb(torch.LongTensor(positions).to(self.dev))
+        seqs = self.emb_dropout(seqs)
+
+        timeline_mask = torch.BoolTensor(log_seqs == 0).to(self.dev)
+        seqs *= ~timeline_mask.unsqueeze(-1) # broadcast in last dim
+
+        tl = seqs.shape[1] # time dim len for enforce causality
+        attention_mask = ~torch.tril(torch.ones((tl, tl), dtype=torch.bool, device=self.dev))
+
+        for i in range(len(self.attention_layers)):
+            seqs = torch.transpose(seqs, 0, 1)
+            Q = self.attention_layernorms[i](seqs)
+            mha_outputs, _ = self.attention_layers[i](Q, seqs, seqs, 
+                                            attn_mask=attention_mask)
+                                            # key_padding_mask=timeline_mask
+                                            # need_weights=False) this arg do not work?
+            seqs = Q + mha_outputs
+            seqs = torch.transpose(seqs, 0, 1)
+
+            seqs = self.forward_layernorms[i](seqs)
+            seqs = self.forward_layers[i](seqs)
+            seqs *=  ~timeline_mask.unsqueeze(-1)
+
+        log_feats = self.last_layernorm(seqs) # (U, T, C) -> (U, -1, C)
+
+        return log_feats
+
     def forward(self, user_ids, log_seqs, pos_seqs, neg_seqs): # for training        
         log_feats = self.log2feats(log_seqs) # user_ids hasn't been used yet
 
@@ -215,4 +296,4 @@ class SASRec(nn.Module):
 
         # preds = self.pos_sigmoid(logits) # rank same item list for different users
 
-        return logits
+        return logits # preds # (U, I)
