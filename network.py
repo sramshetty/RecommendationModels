@@ -203,7 +203,7 @@ class SASRec(nn.Module):
  # https://github.com/pmixer/SASRec.pytorch/blob/master/model.py
 class SASRecPM(torch.nn.Module):
     def __init__(self, user_num, item_num, args):
-        super(SASRec, self).__init__()
+        super().__init__()
 
         self.user_num = user_num
         self.item_num = item_num
