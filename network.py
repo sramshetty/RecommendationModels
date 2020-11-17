@@ -192,9 +192,8 @@ class SASRec(nn.Module):
 
     def forward(self, src):
         log_feats = self.log2feats(src)
-        final_feat = log_feats[:, -1, :]
 
-        logits = self.out_matrix.matmul(final_feat.unsqueeze(-1)).squeeze(-1)
+        logits = (log_feats * self.out_matrix).sum(1)
 
         return logits
 
