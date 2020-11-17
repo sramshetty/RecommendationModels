@@ -152,7 +152,7 @@ class SASRec(nn.Module):
         
         self.device = torch.device('cuda' if use_cuda else 'cpu')
         
-        self.embed = nn.Embedding(input_size, hidden_size, padding_idx=0).to(self.device)
+        self.embed = torch.nn.Embedding(input_size, hidden_size, padding_idx=0).to(self.device)
         self.pe = torch.nn.Embedding(80, hidden_size) if position_embedding else None
         self.attn_blocks = nn.ModuleList([Transformer(hidden_size, num_heads, dropout=dropout_hidden) for i in range(num_layers)])
         self.attn_norms = nn.ModuleList([nn.LayerNorm(hidden_size) for i in range(num_layers)])
