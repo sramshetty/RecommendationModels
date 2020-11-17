@@ -153,9 +153,8 @@ class SASRec(nn.Module):
         self.device = torch.device('cuda' if use_cuda else 'cpu')
         
         self.embed = nn.Embedding(input_size, hidden_size, padding_idx=0).to(self.device)
-        self.pe = PositionalEncoder(hidden_size) if position_embedding else None
+        self.pe = torch.nn.Embedding(80, hidden_size) if position_embedding else None
         self.attn_blocks = nn.ModuleList([Transformer(hidden_size, num_heads, dropout=dropout_hidden) for i in range(num_layers)])
-        self.decode = Transformer(hidden_size, num_heads, dropout=dropout_hidden)
         self.attn_norms = nn.ModuleList([nn.LayerNorm(hidden_size) for i in range(num_layers)])
         self.dropout = nn.Dropout(dropout_hidden)
 
@@ -168,10 +167,11 @@ class SASRec(nn.Module):
         
         self = self.to(self.device)
 
-    def forward(self, log_seqs):
+    def log2feats(self, log_seqs):
         seqs = self.embed(log_seqs)
-        if self.pe != None:
-            seqs = self.pe(seqs)
+        seqs *= self.embed.embedding_dim ** 0.5
+        positions = np.tile(np.array(range(log_seqs.shape[1])), [log_seqs.shape[0], 1])
+        seqs += self.pe(torch.LongTensor(positions).to(self.device))
         seqs = self.dropout(seqs)
 
         src_mask = (log_seqs == 0)
@@ -186,9 +186,33 @@ class SASRec(nn.Module):
             seqs = block(q, seqs, seqs, attention_mask) ### encoded input sequence
             seqs *= ~src_mask.unsqueeze(-1)
 
-        trg = self.embed(log_seqs[:, -1]).unsqueeze(0) ### last input
-        d_output = self.decode(trg, seqs, seqs, src_mask)
+        log_feats = self.final_norm(seqs)
 
-        output = F.matmul(d_output.squeeze(0), self.out_matrix)
+        return log_feats
 
-        return output   
+    def forward(self, user_ids, log_seqs, pos_seqs, neg_seqs): # for training        
+        log_feats = self.log2feats(log_seqs) # user_ids hasn't been used yet
+
+        pos_embs = self.item_emb(torch.LongTensor(pos_seqs).to(self.dev))
+        neg_embs = self.item_emb(torch.LongTensor(neg_seqs).to(self.dev))
+
+        pos_logits = (log_feats * pos_embs).sum(dim=-1)
+        neg_logits = (log_feats * neg_embs).sum(dim=-1)
+
+        # pos_pred = self.pos_sigmoid(pos_logits)
+        # neg_pred = self.neg_sigmoid(neg_logits)
+
+        return pos_logits, neg_logits # pos_pred, neg_pred
+
+    def predict(self, user_ids, log_seqs, item_indices): # for inference
+        log_feats = self.log2feats(log_seqs) # user_ids hasn't been used yet
+
+        final_feat = log_feats[:, -1, :] # only use last QKV classifier, a waste
+
+        item_embs = self.item_emb(torch.LongTensor(item_indices).to(self.dev)) # (U, I, C)
+
+        logits = item_embs.matmul(final_feat.unsqueeze(-1)).squeeze(-1)
+
+        # preds = self.pos_sigmoid(logits) # rank same item list for different users
+
+        return logits
