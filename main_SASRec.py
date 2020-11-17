@@ -5,7 +5,7 @@ import argparse
 
 from network import SASRec
 from tqdm import tqdm
-from utils import *
+from utils_SASRec import *
 
 def str2bool(s):
     if s not in {'false', 'true'}:
