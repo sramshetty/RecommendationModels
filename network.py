@@ -152,7 +152,7 @@ class SASRec(nn.Module):
         
         self.user_num = user_num
         self.item_num = item_num
-        self.device = srgs.device
+        self.device = args.device
         
         self.embed = nn.Embedding(self.item_num+1, args.hidden_units, padding_idx=0).to(self.device)
         self.pe = nn.Embedding(args.maxlen, args.hidden_units)
