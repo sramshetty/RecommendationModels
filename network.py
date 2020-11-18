@@ -190,8 +190,8 @@ class SASRec(nn.Module):
     def forward(self, user_ids, log_seqs, pos_seqs, neg_seqs): # for training        
         log_feats = self.log2feats(log_seqs) # user_ids hasn't been used yet
 
-        pos_embs = self.item_emb(torch.LongTensor(pos_seqs).to(self.device))
-        neg_embs = self.item_emb(torch.LongTensor(neg_seqs).to(self.device))
+        pos_embs = self.embed(torch.LongTensor(pos_seqs).to(self.device))
+        neg_embs = self.embed(torch.LongTensor(neg_seqs).to(self.device))
 
         pos_logits = (log_feats * pos_embs).sum(dim=-1)
         neg_logits = (log_feats * neg_embs).sum(dim=-1)
@@ -206,7 +206,7 @@ class SASRec(nn.Module):
 
         final_feat = log_feats[:, -1, :] # only use last QKV classifier, a waste
 
-        item_embs = self.item_emb(torch.LongTensor(item_indices).to(self.device)) # (U, I, C)
+        item_embs = self.embed(torch.LongTensor(item_indices).to(self.device)) # (U, I, C)
 
         logits = item_embs.matmul(final_feat.unsqueeze(-1)).squeeze(-1)
 
