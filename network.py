@@ -157,10 +157,10 @@ class SASRec(nn.Module):
         self.item_emb = nn.Embedding(self.item_num+1, args.hidden_units, padding_idx=0)
         self.pe = nn.Embedding(args.maxlen, args.hidden_units)
         self.attn_blocks = nn.ModuleList([Transformer(args.hidden_units, args.num_heads, dropout=.2) for i in range(args.num_blocks)])
-        self.attn_norms = nn.ModuleList([nn.LayerNorm(args.hidden_units) for i in range(args.num_blocks)])
+        self.attn_norms = nn.ModuleList([nn.LayerNorm(args.hidden_units, eps=1e-8) for i in range(args.num_blocks)])
         self.dropout = nn.Dropout(args.dropout_rate)
 
-        self.final_norm = nn.LayerNorm(args.hidden_units)
+        self.final_norm = nn.LayerNorm(args.hidden_units, eps=1e-8)
 
         self = self.to(self.device)
 
