@@ -171,7 +171,7 @@ class SASRec(nn.Module):
         seqs += self.pe(torch.LongTensor(positions).to(self.device))
         seqs = self.dropout(seqs)
 
-        src_mask = (log_seqs == 0)
+        src_mask = torch.BoolTensor(log_seqs == 0).to(self.device)
         seqs *= ~src_mask.unsqueeze(-1)
 
         tl = seqs.shape[1]
