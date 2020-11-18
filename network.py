@@ -165,7 +165,7 @@ class SASRec(nn.Module):
         self = self.to(self.device)
 
     def log2feats(self, log_seqs):
-        seqs = self.embed(log_seqs)
+        seqs = self.embed(torch.LongTensor(log_seqs).to(self.device))
         seqs *= self.embed.embedding_dim ** 0.5
         positions = np.tile(np.array(range(log_seqs.shape[1])), [log_seqs.shape[0], 1])
         seqs += self.pe(torch.LongTensor(positions).to(self.device))
@@ -190,8 +190,8 @@ class SASRec(nn.Module):
     def forward(self, user_ids, log_seqs, pos_seqs, neg_seqs): # for training        
         log_feats = self.log2feats(log_seqs) # user_ids hasn't been used yet
 
-        pos_embs = self.item_emb(torch.LongTensor(pos_seqs).to(self.dev))
-        neg_embs = self.item_emb(torch.LongTensor(neg_seqs).to(self.dev))
+        pos_embs = self.item_emb(torch.LongTensor(pos_seqs).to(self.device))
+        neg_embs = self.item_emb(torch.LongTensor(neg_seqs).to(self.device))
 
         pos_logits = (log_feats * pos_embs).sum(dim=-1)
         neg_logits = (log_feats * neg_embs).sum(dim=-1)
@@ -206,7 +206,7 @@ class SASRec(nn.Module):
 
         final_feat = log_feats[:, -1, :] # only use last QKV classifier, a waste
 
-        item_embs = self.item_emb(torch.LongTensor(item_indices).to(self.dev)) # (U, I, C)
+        item_embs = self.item_emb(torch.LongTensor(item_indices).to(self.device)) # (U, I, C)
 
         logits = item_embs.matmul(final_feat.unsqueeze(-1)).squeeze(-1)
 
