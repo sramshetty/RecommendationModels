@@ -147,24 +147,21 @@ class SelfAttention(nn.Module):
 
 #My SASRec implementation
 class SASRec(nn.Module):
-    def __init__(self, input_size, hidden_size, output_size, num_layers=1, num_heads=1, use_cuda=True, batch_size=50, dropout_input=0, dropout_hidden=0.5, embedding_dim=-1, position_embedding=False, shared_embedding=True):
+    def __init__(self, user_num, item_num, args):
         super().__init__()
         
-        self.device = torch.device('cuda' if use_cuda else 'cpu')
+        self.user_num = user_num
+        self.item_num = item_num
+        self.device = srgs.device
         
-        self.embed = nn.Embedding(input_size, hidden_size, padding_idx=0).to(self.device)
-        self.pe = nn.Embedding(80, hidden_size) if position_embedding else None
-        self.attn_blocks = nn.ModuleList([Transformer(hidden_size, num_heads, dropout=dropout_hidden) for i in range(num_layers)])
-        self.attn_norms = nn.ModuleList([nn.LayerNorm(hidden_size) for i in range(num_layers)])
-        self.dropout = nn.Dropout(dropout_hidden)
+        self.embed = nn.Embedding(self.item_num+1, args.hidden_units, padding_idx=0).to(self.device)
+        self.pe = nn.Embedding(args.maxlen, args.hidden_units)
+        self.attn_blocks = nn.ModuleList([Transformer(args.hidden_units, args.num_heads, dropout=.2) for i in range(args.num_blocks)])
+        self.attn_norms = nn.ModuleList([nn.LayerNorm(args.hidden_units) for i in range(args.num_blocks)])
+        self.dropout = nn.Dropout(args.dropout_rate)
 
-        self.final_norm = nn.LayerNorm(hidden_size)
+        self.final_norm = nn.LayerNorm(args.hidden_units)
 
-        if shared_embedding:
-            self.out_matrix = self.embed.weight.to(self.device)
-        else:
-            self.out_matrix = torch.rand(hidden_size, output_size, requires_grad=True).to(self.device)
-        
         self = self.to(self.device)
 
     def log2feats(self, log_seqs):
@@ -190,14 +187,32 @@ class SASRec(nn.Module):
 
         return log_feats
 
-    def forward(self, src):
-        log_feats = self.log2feats(src)
-        final_feat = log_feats[:, -1, :]
+    def forward(self, user_ids, log_seqs, pos_seqs, neg_seqs): # for training        
+        log_feats = self.log2feats(log_seqs) # user_ids hasn't been used yet
 
-        #logits = (log_feats * self.out_matrix).sum(1)
-        logits = self.out_matrix.matmul(final_feat.unsqueeze(-1)).squeeze(-1)
+        pos_embs = self.item_emb(torch.LongTensor(pos_seqs).to(self.dev))
+        neg_embs = self.item_emb(torch.LongTensor(neg_seqs).to(self.dev))
 
-        return logits
+        pos_logits = (log_feats * pos_embs).sum(dim=-1)
+        neg_logits = (log_feats * neg_embs).sum(dim=-1)
+
+        # pos_pred = self.pos_sigmoid(pos_logits)
+        # neg_pred = self.neg_sigmoid(neg_logits)
+
+        return pos_logits, neg_logits # pos_pred, neg_pred
+
+    def predict(self, user_ids, log_seqs, item_indices): # for inference
+        log_feats = self.log2feats(log_seqs) # user_ids hasn't been used yet
+
+        final_feat = log_feats[:, -1, :] # only use last QKV classifier, a waste
+
+        item_embs = self.item_emb(torch.LongTensor(item_indices).to(self.dev)) # (U, I, C)
+
+        logits = item_embs.matmul(final_feat.unsqueeze(-1)).squeeze(-1)
+
+        # preds = self.pos_sigmoid(logits) # rank same item list for different users
+
+        return logits # preds # (U, I)
 
 
  
