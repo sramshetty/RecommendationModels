@@ -1,0 +1,152 @@
+import pandas as pd
+import numpy as np
+import torch
+
+import pickle
+import random
+
+class Dataset(object):
+    def __init__(self, itemFile, data_name, observed_threshold, window_size, itemmap=dict()):
+        data_file = open(itemFile, 'rb')
+
+        action_seq_arr_total = None
+        data_seq_arr = pickle.load(data_file)
+
+        action_seq_arr_total = data_seq_arr
+        
+        seq_num = len(action_seq_arr_total)
+        print("seq num", seq_num)
+
+        self.m_seq_list = []
+        self.m_input_action_seq_list = []
+        self.m_target_action_seq_list = []
+        self.m_input_seq_idx_list = []
+
+        self.m_itemmap = itemmap
+
+        print("loading item map")
+
+        for seq_index in range(seq_num):
+            action_seq_arr = action_seq_arr_total[seq_index]
+
+            action_num_seq = len(action_seq_arr)
+
+            action_seq_list = []
+
+            for action_index in range(action_num_seq):
+                item = action_seq_arr[action_index]
+
+                if itemmap is None: 
+                    if item not in self.m_itemmap:
+                        item_id = len(self.m_itemmap)
+                        self.m_itemmap[item] = item_id
+                else:
+                    if item not in self.m_itemmap:
+                        continue
+
+                item_id = self.m_itemmap[item]
+
+                action_seq_list.append(item_id)
+
+            self.m_seq_list.append(action_seq_list)
+
+        print("finish loading item map")
+
+        print("loading data")
+        for action_seq_arr in self.m_seq_list:
+
+            action_num_seq = len(action_seq_arr)
+            
+            if action_num_seq < window_size :
+                window_size = action_num_seq
+
+            for action_index in range(observed_threshold, window_size):
+                input_sub_seq = action_seq_arr[:action_index]
+                target_sub_seq = action_seq_arr[action_index]
+                self.m_input_action_seq_list.append(input_sub_seq)
+                self.m_target_action_seq_list.append(target_sub_seq)
+
+            for action_index in range(window_size, action_num_seq):
+                input_sub_seq = action_seq_arr[action_index-window_size+1:action_index]
+                target_sub_seq = action_seq_arr[action_index]
+                self.m_input_action_seq_list.append(input_sub_seq)
+                self.m_target_action_seq_list.append(target_sub_seq)
+
+        def __len__(self):
+            return len(self.m_input_action_seq_list)
+
+        def __getitem__(self, index):
+            x = self.m_input_action_seq_list[index]
+            y = self.m_target_action_seq_list[index]
+
+            x = np.array(x)
+            y = np.array(y)
+
+            x_tensor = torch.LongTensor(x)
+            y_tensor = torch.LongTensor(y)
+
+            return x_tensor, y_tensor
+
+        @property
+        def items(self):
+            print("first item", self.m_itemmap['<PAD>'])
+            return self.m_itemmap
+
+
+class DataLoader():
+        def __init__(self, dataset, batch_size):
+            self.m_dataset = dataset
+            self.m_batch_size = batch_size
+
+        def __iter__(self):
+
+            batch_size = self.m_batch_size
+            input_action_seq_list = self.m_dataset.m_input_action_seq_list
+            target_action_seq_list = self.m_dataset.m_target_action_seq_list
+            input_seq_idx_list = self.m_dataset.m_input_seq_idx_list
+
+            input_num = len(input_action_seq_list)
+
+            batch_num = int(input_num/batch_size)
+
+            for batch_index in range(batch_num):
+                x_batch = []
+                y_batch = []
+                idx_batch = []
+
+                for seq_index_batch in range(batch_size):
+                    seq_index = batch_index*batch_size+seq_index_batch
+
+                    x_batch.append(input_action_seq_list[seq_index])
+                    y_batch.append(target_action_seq_list[seq_index])
+                    idx_batch.append(input_seq_idx_list[seq_index])
+
+                x_batch, y_batch, idx_batch = self.batchifyData(x_batch, y_batch, idx_batch)
+
+                x_batch_tensor = torch.LongTensor(x_batch)
+                y_batch_tensor = torch.LongTensor(y_batch)
+                idx_batch_tensor = torch.LongTensor(idx_batch)
+
+                yield x_batch_tensor, y_batch_tensor, idx_batch_tensor
+
+        def batchifyData(self, input_action_seq_batch, target_action_seq_batch, idx_batch):
+            longest_len_batch = max(map(len, input_action_seq_batch))
+            num_batches = len(input_action_seq_batch)
+
+            pad_input_action_seq_batch = np.zeros((num_batches, longest_len_batch))
+            pad_target_action_seq_batch = np.zeros(num_batches)
+            pad_idx_batch = np.zeros(num_batches)
+            
+            zip_batch = sorted(zip(idx_batch, input_action_seq_batch, target_action_seq_batch), reverse=True)
+
+            for seq_i, (seq_idx, input_action_seq_i, target_action_seq_i) in enumerate(zip_batch):
+                pad_input_action_seq_batch[seq_i, 0:len(input_action_seq_i)] = input_action_seq_i
+                pad_target_action_seq_batch[seq_i] = target_action_seq_i
+                pad_idx_batch[seq_i] = seq_idx
+
+            return pad_input_action_seq_batch, pad_target_action_seq_batch, pad_idx_batch
+
+
+
+
+

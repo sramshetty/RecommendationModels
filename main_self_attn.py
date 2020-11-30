@@ -4,11 +4,11 @@ import torch
 import numpy as np
 import os
 import datetime
-from dataset import *
-from loss import *
+from dataset_shiv import *
+from loss_shiv import *
 from model import *
 from optimizer import *
-from trainer import *
+from trainer_shiv import *
 from torch.utils import data
 from network import SelfAttention, SASRec
 
