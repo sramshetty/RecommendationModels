@@ -6,38 +6,26 @@ import pickle
 import random
 
 class Dataset(object):
-    def __init__(self, itemFile, data_name, observed_threshold, window_size, itemmap=dict()):
+    def __init__(self, itemFile, data_name, observed_threshold, window_size, itemmap=None):
         data_file = open(itemFile, "rb")
 
         action_seq_arr_total = None
         data_seq_arr = pickle.load(data_file)
 
-        if data_name == "movielen_itemmap":
-            action_seq_arr_total = data_seq_arr['action_list']
-            itemmap = data_seq_arr['itemmap']
-
-        if data_name == "movielen":
-            action_seq_arr_total = data_seq_arr
-
-        if data_name == "xing":
-            action_seq_arr_total = data_seq_arr
-
-        if data_name == "taobao":
-            action_seq_arr_total = data_seq_arr
+        action_seq_arr_total = data_seq_arr
 
         seq_num = len(action_seq_arr_total)
         print("seq num", seq_num)
 
-        seq_len_list = []
 
         self.m_itemmap = itemmap
+        if itemmap is None:
+            self.m_itemmap = {}
         self.m_itemmap['<PAD>'] = 0
 
         self.m_seq_list = []
-
         self.m_input_action_seq_list = []
         self.m_target_action_seq_list = []
-        self.m_input_seq_idx_list = []
 
         print("loading item map")
 
@@ -77,15 +65,13 @@ class Dataset(object):
                 target_sub_seq = action_seq_arr[action_index]
                 self.m_input_action_seq_list.append(input_sub_seq)
                 self.m_target_action_seq_list.append(target_sub_seq)
-                self.m_input_seq_idx_list.append(action_index)
 
             for action_index in range(window_size, action_num_seq):
                 input_sub_seq = action_seq_arr[action_index-window_size+1:action_index]
                 target_sub_seq = action_seq_arr[action_index]
                 self.m_input_action_seq_list.append(input_sub_seq)
                 self.m_target_action_seq_list.append(target_sub_seq)
-                self.m_input_seq_idx_list.append(action_index)
-
+                
     def __len__(self):
         return len(self.m_input_action_seq_list)
 
