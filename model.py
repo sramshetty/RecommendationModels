@@ -130,78 +130,107 @@ class PositionalEncoder(nn.Module):
         return x
 
 
-class FeedForward(nn.Module):
+# class FeedForward(nn.Module):
 
-    def __init__(self, d_model, d_ff=128, dropout = 0.5):
-        super().__init__() 
+#     def __init__(self, d_model, d_ff=128, dropout = 0.5):
+#         super().__init__() 
 
-        self.conv_1 = nn.Conv1d(d_model, d_model, 1)
-        self.conv_2 = nn.Conv1d(d_model, d_model, 1)
-        self.dropout1 = nn.Dropout(dropout)
-        self.dropout2 = nn.Dropout(dropout)
+#         self.conv_1 = nn.Conv1d(d_model, d_model, 1)
+#         self.conv_2 = nn.Conv1d(d_model, d_model, 1)
+#         self.dropout1 = nn.Dropout(dropout)
+#         self.dropout2 = nn.Dropout(dropout)
 
-    def forward(self, inputs):
-        outputs = self.dropout1(nn.functional.relu(self.conv_1(inputs.transpose(-1, -2))))
-        outputs = self.dropout2(self.conv_2(outputs))
-        outputs = outputs.transpose(-1, -2)
-        outputs += inputs
-        return outputs
+#     def forward(self, inputs):
+#         outputs = self.dropout1(nn.functional.relu(self.conv_1(inputs.transpose(-1, -2))))
+#         outputs = self.dropout2(self.conv_2(outputs))
+#         outputs = outputs.transpose(-1, -2)
+#         outputs += inputs
+#         return outputs
 
 
-# class Encoder(nn.Module):
+# # class Encoder(nn.Module):
 
+# #     def __init__(self, d_model, heads, dropout = 0.5):
+# #         super().__init__()
+        
+# #         self.attn = nn.MultiheadAttention(d_model, heads, dropout=dropout)
+# #         self.norm_1 = nn.LayerNorm(d_model)
+# #         self.norm_2 = nn.LayerNorm(d_model)
+# #         self.ff = FeedForward(d_model)
+        
+# #     def forward(self, q, k, v, mask):
+# #         attn_output, attn_output_weights = self.attn(q, k, v, key_padding_mask=mask)
+# #         q = q + attn_output
+# #         q = self.norm_1(q)
+# #         q = q + self.ff(q)
+# #         q = self.norm_2(q)  
+# #         return q
+
+
+# # class Decoder(nn.Module):
+
+# #     def __init__(self, d_model, heads, dropout=0.5):
+# #         super().__init__()
+        
+# #         self.mask_attn = nn.MultiheadAttention(d_model, heads, dropout=dropout)
+# #         self.attn = nn.MultiheadAttention(d_model, heads, dropout=dropout)
+# #         self.norm_1 = nn.LayerNorm(d_model)
+# #         self.norm_2 = nn.LayerNorm(d_model)
+# #         self.norm_3 = nn.LayerNorm(d_model)
+# #         self.ff = FeedForward(d_model)
+
+# #     def forward(self, q, k, v, mask):
+# #         attn_output, attn_output_weights = self.mask_attn(q, k, v, key_padding_mask=mask)
+# #         q = q + attn_output
+# #         q = self.norm_1(q)
+# #         attn_output, attn_output_weights = self.attn(q, k, v)
+# #         q = q + attn_output
+# #         q = self.norm_2(q)
+# #         q = q + self.ff(q)
+# #         q = self.norm_3(q) 
+# #         return q
+
+# class Transformer(nn.Module):
 #     def __init__(self, d_model, heads, dropout = 0.5):
 #         super().__init__()
         
 #         self.attn = nn.MultiheadAttention(d_model, heads, dropout=dropout)
-#         self.norm_1 = nn.LayerNorm(d_model)
-#         self.norm_2 = nn.LayerNorm(d_model)
-#         self.ff = FeedForward(d_model)
+#         self.norm_1 = nn.LayerNorm(d_model, eps=1e-8)
+#         self.ff = FeedForward(d_model, dropout=dropout)
         
 #     def forward(self, q, k, v, mask):
-#         attn_output, attn_output_weights = self.attn(q, k, v, key_padding_mask=mask)
+#         attn_output, attn_output_weights = self.attn(q, k, v, attn_mask=mask)
 #         q = q + attn_output
+#         q = q.transpose(0,1)
 #         q = self.norm_1(q)
-#         q = q + self.ff(q)
-#         q = self.norm_2(q)  
+#         q = self.ff(q)
 #         return q
 
+class FeedForward(nn.Module):
+    def __init__(self, d_model, d_ff=128, dropout = 0.5):
+        super().__init__() 
 
-# class Decoder(nn.Module):
-
-#     def __init__(self, d_model, heads, dropout=0.5):
-#         super().__init__()
-        
-#         self.mask_attn = nn.MultiheadAttention(d_model, heads, dropout=dropout)
-#         self.attn = nn.MultiheadAttention(d_model, heads, dropout=dropout)
-#         self.norm_1 = nn.LayerNorm(d_model)
-#         self.norm_2 = nn.LayerNorm(d_model)
-#         self.norm_3 = nn.LayerNorm(d_model)
-#         self.ff = FeedForward(d_model)
-
-#     def forward(self, q, k, v, mask):
-#         attn_output, attn_output_weights = self.mask_attn(q, k, v, key_padding_mask=mask)
-#         q = q + attn_output
-#         q = self.norm_1(q)
-#         attn_output, attn_output_weights = self.attn(q, k, v)
-#         q = q + attn_output
-#         q = self.norm_2(q)
-#         q = q + self.ff(q)
-#         q = self.norm_3(q) 
-#         return q
+        self.linear_1 = nn.Linear(d_model, d_ff)
+        self.dropout = nn.Dropout(dropout)
+        self.linear_2 = nn.Linear(d_ff, d_model)
+    def forward(self, x):
+        x = self.dropout(F.relu(self.linear_1(x)))
+        x = self.linear_2(x)
+        return x
 
 class Transformer(nn.Module):
     def __init__(self, d_model, heads, dropout = 0.5):
         super().__init__()
         
         self.attn = nn.MultiheadAttention(d_model, heads, dropout=dropout)
-        self.norm_1 = nn.LayerNorm(d_model, eps=1e-8)
-        self.ff = FeedForward(d_model, dropout=dropout)
+        self.norm_1 = nn.LayerNorm(d_model)
+        self.norm_2 = nn.LayerNorm(d_model)
+        self.ff = FeedForward(d_model)
         
     def forward(self, q, k, v, mask):
-        attn_output, attn_output_weights = self.attn(q, k, v, attn_mask=mask)
+        attn_output, attn_output_weights = self.attn(q, k, v, key_padding_mask=mask)
         q = q + attn_output
-        q = q.transpose(0,1)
         q = self.norm_1(q)
-        q = self.ff(q)
+        q = q + self.ff(q)
+        q = self.norm_2(q)  
         return q
