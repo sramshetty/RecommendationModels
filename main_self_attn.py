@@ -131,7 +131,7 @@ def main():
     if not args.is_eval:
         make_checkpoint_dir()
 
-    input_size = 5000
+    input_size = len(train_data.m_itemmap)
     output_size = input_size
     print("input_size", input_size)
 
