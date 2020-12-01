@@ -4,11 +4,11 @@ import torch
 import numpy as np
 import os
 import datetime
-from dataset_shiv import *
-from loss_shiv import *
+from dataset import *
+from loss import *
 from model import *
 from optimizer import *
-from trainer_shiv import *
+from trainer import *
 from torch.utils import data
 from network import SelfAttention, SASRec
 
@@ -124,9 +124,9 @@ def main():
 
     observed_threshold = args.test_observed
     
-    train_data = dataset_shiv.Dataset(train_data, data_name, observed_threshold, window_size)
-    valid_data = dataset_shiv.Dataset(valid_data, data_name, observed_threshold, window_size, itemmap=train_data.m_itemmap)
-    test_data = dataset_shiv.Dataset(test_data, data_name, observed_threshold, window_size)
+    train_data = dataset_shiv.DatasetAttn(train_data, data_name, observed_threshold, window_size)
+    valid_data = dataset_shiv.DatasetAttn(valid_data, data_name, observed_threshold, window_size, itemmap=train_data.m_itemmap)
+    test_data = dataset_shiv.DatasetAttn(test_data, data_name, observed_threshold, window_size)
     
     if not args.is_eval:
         make_checkpoint_dir()
@@ -135,9 +135,9 @@ def main():
     output_size = input_size
     print("input_size", input_size)
 
-    train_data_loader = dataset_shiv.DataLoader(train_data, args.batch_size)
-    valid_data_loader = dataset_shiv.DataLoader(valid_data, args.batch_size)
-    test_data_loader = dataset_shiv.DataLoader(test_data, args.batch_size)
+    train_data_loader = dataset_shiv.DataLoaderAttn(train_data, args.batch_size)
+    valid_data_loader = dataset_shiv.DataLoaderAttn(valid_data, args.batch_size)
+    test_data_loader = dataset_shiv.DataLoaderAttn(test_data, args.batch_size)
 
     if not args.is_eval:
         model = SelfAttention(input_size, args.hidden_size, output_size,
@@ -166,7 +166,7 @@ def main():
 
         loss_function = LossFunction(loss_type=args.loss_type, use_cuda=args.cuda)
 
-        trainer = Trainer(model=model, train_data=train_data_loader, eval_data=test_data_loader,
+        trainer = TrainerAttn(model=model, train_data=train_data_loader, eval_data=test_data_loader,
                                   optim=optimizer,
                                   use_cuda=args.cuda,
                                   loss_func=loss_function,
