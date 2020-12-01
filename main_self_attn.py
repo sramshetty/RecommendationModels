@@ -126,7 +126,7 @@ def main():
     
     train_data = dataset_shiv.Dataset(train_data, data_name, observed_threshold, window_size)
     valid_data = dataset_shiv.Dataset(valid_data, data_name, observed_threshold, window_size, itemmap=train_data.m_itemmap)
-    test_data = datase_shiv.Dataset(test_data, data_name, observed_threshold, window_size)
+    test_data = dataset_shiv.Dataset(test_data, data_name, observed_threshold, window_size)
     
     if not args.is_eval:
         make_checkpoint_dir()
