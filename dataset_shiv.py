@@ -38,7 +38,7 @@ class Dataset(object):
             for action_index in range(action_num_seq):
                 item = action_seq_arr[action_index]
 
-                if len(itemmap) == 0: 
+                if len(self.m_itemmap) == 0: 
                     if item not in self.m_itemmap:
                         item_id = len(self.m_itemmap)
                         self.m_itemmap[item] = item_id
