@@ -28,10 +28,10 @@ class Trainer(object):
             start = time.time()
             train_loss = self.train_epoch(epoch, batch_size)
 
-            loss, recall, mrr = self.evaluation.evalAttn(self.train_data, batch_size)
+            loss, recall, mrr = self.evaluation_shiv.eval(self.train_data, batch_size)
             print("Train Epoch: {}, train loss: {:.4f},  loss: {:.4f}, recall: {:.4f}, mrr: {:.4f}, time: {}".format(epoch, train_loss, loss, recall, mrr, time.time() - start))
 
-            loss, recall, mrr = self.evaluation.evalAttn(self.eval_data, batch_size, "Test")
+            loss, recall, mrr = self.evaluation_shiv.eval(self.eval_data, batch_size, "Test")
             print("Test  Epoch: {}, loss: {:.4f}, recall: {:.4f}, mrr: {:.4f}, time: {}".format(epoch, loss, recall, mrr, time.time() - start))
 
     def train_epoch(self, epoch, batch_size):
