@@ -14,7 +14,6 @@ class Dataset(object):
         seq_num = len(action_seq_arr_total)
         print("seq num", seq_num)
 
-
         self.m_itemmap = itemmap
         if itemmap is None:
             self.m_itemmap = {}
