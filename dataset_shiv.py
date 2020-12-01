@@ -36,13 +36,10 @@ class Dataset(object):
             for action_index in range(action_num_seq):
                 item = action_seq_arr[action_index]
 
-                if itemmap is None: 
+                if len(itemmap) == 0: 
                     if item not in self.m_itemmap:
                         item_id = len(self.m_itemmap)
                         self.m_itemmap[item] = item_id
-                else:
-                    if item not in self.m_itemmap:
-                        continue
 
                 item_id = self.m_itemmap[item]
 
@@ -89,7 +86,6 @@ class Dataset(object):
 
         @property
         def items(self):
-            print("first item", self.m_itemmap['<PAD>'])
             return self.m_itemmap
 
 
