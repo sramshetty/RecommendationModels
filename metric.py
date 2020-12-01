@@ -3,11 +3,9 @@ import torch
 def get_recall(indices, targets, mask):
     """
     Calculates the recall score for the given predictions and targets
-
     Args:
         indices (Bxk): torch.LongTensor. top-k indices predicted by the model.
         targets (B): torch.LongTensor. actual target indices.
-
     Returns:
         recall (float): the recall score
     """
@@ -29,7 +27,6 @@ def get_mrr(indices, targets, mask):
     Args:
         indices (Bxk): torch.LongTensor. top-k indices predicted by the model.
         targets (B): torch.LongTensor. actual target indices.
-
     Returns:
         mrr (float): the mrr score
     """
@@ -49,11 +46,9 @@ def get_mrr(indices, targets, mask):
 def evaluate(indices, targets, mask, k=20, debug=False):
     """
     Evaluates the model using Recall@K, MRR@K scores.
-
     Args:
         logits (B,C): torch.LongTensor. The predicted logit for the next items.
         targets (B): torch.LongTensor. actual target indices.
-
     Returns:
         recall (float): the recall score
         mrr (float): the mrr score
@@ -61,6 +56,8 @@ def evaluate(indices, targets, mask, k=20, debug=False):
     
     _, indices = torch.topk(indices, k, -1)
     
+    indices = indices.cpu()
+    targets = targets.cpu()
     # print("topK", _)
     # print("predict top k", indices)
     # print("true target", targets)

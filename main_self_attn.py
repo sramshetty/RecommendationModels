@@ -10,7 +10,7 @@ from model import *
 from optimizer import *
 from trainer import *
 from torch.utils import data
-from network import SelfAttention, SASRec
+from network import SelfAttention
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--hidden_size', default=50, type=int)
@@ -131,7 +131,7 @@ def main():
     if not args.is_eval:
         make_checkpoint_dir()
 
-    input_size = len(train_data.m_itemmap)
+    input_size = len(train_data.items)
     output_size = input_size
     print("input_size", input_size)
 
@@ -186,7 +186,7 @@ def main():
             optim = checkpoint["optim"]
             loss_function = LossFunction(loss_type=args.loss_type, use_cuda=args.cuda)
             evaluation = Evaluation(model, loss_function, use_cuda=args.cuda)
-            loss, recall, mrr = evaluation.eval(valid_data)
+            loss, recall, mrr = evaluation.evalAttn(valid_data)
             print("Final result: recall = {:.2f}, mrr = {:.2f}".format(recall, mrr))
         else:
             print("Pre trained model is None!")
