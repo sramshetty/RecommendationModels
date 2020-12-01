@@ -131,6 +131,7 @@ class SelfAttention(nn.Module):
     def forward(self, src):
         x = self.embed(src)
         src_mask = (src == 0)
+        print("done")
         if self.pe != None:
             x = self.pe(x)
 
