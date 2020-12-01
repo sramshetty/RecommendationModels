@@ -53,6 +53,7 @@ class Trainer(object):
             loss_batch = self.loss_func(logit_sampled_batch)
             
             losses.append(loss_batch.item())
+            print("epoch loss: {:.4f}", loss_batch.item())
             loss_batch.backward()
 
             self.optim.step()
