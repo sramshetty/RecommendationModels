@@ -130,7 +130,7 @@ class SelfAttention(nn.Module):
 
     def forward(self, src):
         x = self.embed(src)
-        src_mask = (src == 0)
+        src_mask = torch.BoolTensor(src == 0).to(self.device)
         if self.pe != None:
             x = self.pe(x)
 
