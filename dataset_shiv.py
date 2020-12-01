@@ -6,7 +6,7 @@ import pickle
 import random
 
 class Dataset(object):
-    def __init__(self, itemFile, data_name, observed_threshold, window_size, itemmap=dict()):
+    def __init__(self, itemFile, data_name, observed_threshold, window_size, itemmap=None):
         data_file = open(itemFile, 'rb')
 
         action_seq_arr_total = None
@@ -23,6 +23,8 @@ class Dataset(object):
         self.m_input_seq_idx_list = []
 
         self.m_itemmap = itemmap
+        if itemmap is None:
+            self.m_itemmap = {}
 
         print("loading item map")
 
