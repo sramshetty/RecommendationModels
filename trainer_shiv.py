@@ -16,6 +16,7 @@ class Trainer(object):
         self.topk = topk
         self.args = args
         self.device = torch.device('cuda' if use_cuda else 'cpu')
+        self.evaluation = Evaluation(model=self.model, loss_func=self.loss_func, use_cuda=use_cuda, k=self.topk, warm_start=args.warm_start)
 
     def train(self, start_epoch, end_epoch, batch_size, start_time=None):
         if start_time == None:
@@ -28,10 +29,10 @@ class Trainer(object):
             start = time.time()
             train_loss = self.train_epoch(epoch, batch_size)
 
-            loss, recall, mrr = self.evaluation_shiv.eval(self.train_data, batch_size)
+            loss, recall, mrr = self.evaluation.eval(self.train_data, batch_size)
             print("Train Epoch: {}, train loss: {:.4f},  loss: {:.4f}, recall: {:.4f}, mrr: {:.4f}, time: {}".format(epoch, train_loss, loss, recall, mrr, time.time() - start))
 
-            loss, recall, mrr = self.evaluation_shiv.eval(self.eval_data, batch_size, "Test")
+            loss, recall, mrr = self.evaluation.eval(self.eval_data, batch_size, "Test")
             print("Test  Epoch: {}, loss: {:.4f}, recall: {:.4f}, mrr: {:.4f}, time: {}".format(epoch, loss, recall, mrr, time.time() - start))
 
     def train_epoch(self, epoch, batch_size):
