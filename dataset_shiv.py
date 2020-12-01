@@ -6,7 +6,7 @@ import pickle
 import random
 
 class Dataset(object):
-    def __init__(self, itemFile, data_name, observed_threshold, window_size, itemmap=None):
+    def __init__(self, itemFile, data_name, observed_threshold, window_size, itemmap=dict()):
         data_file = open(itemFile, "rb")
 
         action_seq_arr_total = None
@@ -31,8 +31,6 @@ class Dataset(object):
         seq_len_list = []
 
         self.m_itemmap = itemmap
-        if itemmap is None:
-            self.m_itemmap = {}
         self.m_itemmap['<PAD>'] = 0
 
         self.m_seq_list = []
@@ -57,9 +55,6 @@ class Dataset(object):
                     if item not in self.m_itemmap:
                         item_id = len(self.m_itemmap)
                         self.m_itemmap[item] = item_id
-                else:
-                    if item not in self.m_itemmap:
-                        continue
 
                 item_id = self.m_itemmap[item]
 
