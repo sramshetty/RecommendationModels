@@ -9,10 +9,7 @@ class Dataset(object):
     def __init__(self, itemFile, data_name, observed_threshold, window_size, itemmap=None):
         data_file = open(itemFile, "rb")
 
-        action_seq_arr_total = None
-        data_seq_arr = pickle.load(data_file)
-
-        action_seq_arr_total = data_seq_arr
+        action_seq_arr_total = pickle.load(data_file)
 
         seq_num = len(action_seq_arr_total)
         print("seq num", seq_num)
