@@ -26,6 +26,7 @@ class Dataset(object):
         self.m_seq_list = []
         self.m_input_action_seq_list = []
         self.m_target_action_seq_list = []
+        self.m_input_seq_idx_list = []
 
         print("loading item map")
 
@@ -65,13 +66,15 @@ class Dataset(object):
                 target_sub_seq = action_seq_arr[action_index]
                 self.m_input_action_seq_list.append(input_sub_seq)
                 self.m_target_action_seq_list.append(target_sub_seq)
+                self.m_input_seq_idx_list.append(action_index)
 
             for action_index in range(window_size, action_num_seq):
                 input_sub_seq = action_seq_arr[action_index-window_size+1:action_index]
                 target_sub_seq = action_seq_arr[action_index]
                 self.m_input_action_seq_list.append(input_sub_seq)
                 self.m_target_action_seq_list.append(target_sub_seq)
-                
+                self.m_input_seq_idx_list.append(action_index)
+
     def __len__(self):
         return len(self.m_input_action_seq_list)
 
