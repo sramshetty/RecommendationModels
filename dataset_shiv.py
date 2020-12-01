@@ -25,6 +25,7 @@ class Dataset(object):
         self.m_itemmap = itemmap
         if itemmap is None:
             self.m_itemmap = {}
+        self.m_itemmap['<PAD>'] = 0
 
         print("loading item map")
 
