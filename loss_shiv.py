@@ -24,22 +24,17 @@ class LossFunction(nn.Module):
         else:
             raise NotImplementedError
 
-    def forward(self, logit):
-        return self._loss_fn(logit)
+    def forward(self, logit, target=None):
+        return self._loss_fn(logit) if target == None else self._loss_fn(logit, target)
 
 
 class SampledCrossEntropyLoss(nn.Module):
     def __init__(self, use_cuda):
         super(SampledCrossEntropyLoss, self).__init__()
         self.xe_loss = nn.CrossEntropyLoss()
-        self.use_cuda = use_cuda
 
-    def forward(self, logit):
-        batch_size = logit.size(1)
-        target = Variable(torch.arange(batch_size).long())
-        if self.use_cuda: target = target.cuda()
-
-        return self.xe_loss(logit, target)
+    def forward(self, logit, target):
+        return self.xe_loss(logit.view(target.size(0), -1), target)
 
 class TOP1Loss(nn.Module):
     def __init__(self):
