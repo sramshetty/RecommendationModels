@@ -9,10 +9,11 @@ import torch
 import numpy as np
 import os
 import datetime
-from loss import *
+from loss_shiv import *
 from network import *
 from optimizer import *
-from trainer import *
+from trainer_shiv import *
+from evaluation_shiv import *
 from torch.utils import data
 import pickle
 import sys
@@ -256,7 +257,7 @@ def main():
 		# print("c weights", c_weights)
 		loss_function = LossFunction(loss_type=loss_type, use_cuda=args.cuda)
 
-		trainer = Trainer(log, network,
+		trainer = TrainerRNN(log, network,
 							  train_data=train_data_loader,
 							  eval_data=test_data_loader,
 							  optim=optimizer,
@@ -277,7 +278,7 @@ def main():
 			model.gru.flatten_parameters()
 			optim = checkpoint["optim"]
 			loss_function = LossFunction(loss_type=loss_type, use_cuda=args.cuda)
-			evaluation = Evaluation(model, loss_function, use_cuda=args.cuda)
+			evaluation = EvaluationRNN(model, loss_func=loss_function, use_cuda=args.cuda)
 			loss, recall, mrr = evaluation.eval(valid_data)
 			print("Final result: recall = {:.2f}, mrr = {:.2f}".format(recall, mrr))
 		else:
