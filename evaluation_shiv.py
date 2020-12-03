@@ -44,7 +44,7 @@ class Evaluation(object):
                 logit_batch, hidden = self.model(input_x_batch, hidden, x_len_batch)
 
                 logit_sampled_batch = logit_batch[:, target_y_batch.view(-1)]
-                loss_batch = self.loss_func(logit_sampled_batch, target_y_batch)
+                loss_batch = self.loss_func(logit_sampled_batch)
 
                 losses.append(loss_batch.item())
                 
