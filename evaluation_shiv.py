@@ -17,65 +17,65 @@ class Evaluation(object):
         self.device = torch.device('cuda' if use_cuda else 'cpu')
 
     def evalRNN(self, eval_data, batch_size, train_test_flag):
-		self.model.eval()
+        self.model.eval()
 
-		losses = []
-		recalls = []
-		mrrs = []
-		weights = []
+        losses = []
+        recalls = []
+        mrrs = []
+        weights = []
 
-		# losses = None
-		# recalls = None
-		# mrrs = None
+        # losses = None
+        # recalls = None
+        # mrrs = None
 
-		dataloader = eval_data
+        dataloader = eval_data
 
-		with torch.no_grad():
-			total_test_num = []
+        with torch.no_grad():
+            total_test_num = []
 
-			for x_short_action_batch, mask_short_action_batch, pad_x_short_actionNum_batch, y_action_batch, y_action_idx_batch in dataloader:
+            for x_short_action_batch, mask_short_action_batch, pad_x_short_actionNum_batch, y_action_batch, y_action_idx_batch in dataloader:
 
-				if train_test_flag == "train":
-					eval_flag = random.randint(1,101)
-					if eval_flag != 10:
-						continue
+                if train_test_flag == "train":
+                    eval_flag = random.randint(1,101)
+                    if eval_flag != 10:
+                        continue
 
-				x_short_action_batch = x_short_action_batch.to(self.device)
-				mask_short_action_batch = mask_short_action_batch.to(self.device)
-				y_action_batch = y_action_batch.to(self.device)
-			
-				warm_start_mask = (y_action_idx_batch>=self.warm_start)
-	
-				output_batch = self.model(x_short_action_batch, mask_short_action_batch, pad_x_short_actionNum_batch)
+                x_short_action_batch = x_short_action_batch.to(self.device)
+                mask_short_action_batch = mask_short_action_batch.to(self.device)
+                y_action_batch = y_action_batch.to(self.device)
+            
+                warm_start_mask = (y_action_idx_batch>=self.warm_start)
 
-				sampled_logit_batch, sampled_target_batch = self.model.m_ss(output_batch, y_action_batch, None, None, None, None, None, None, "full")
+                output_batch = self.model(x_short_action_batch, mask_short_action_batch, pad_x_short_actionNum_batch)
 
-				loss_batch = self.loss_func(sampled_logit_batch, sampled_target_batch)
-				losses.append(loss_batch.item())
+                sampled_logit_batch, sampled_target_batch = self.model.m_ss(output_batch, y_action_batch, None, None, None, None, None, None, "full")
 
-				# et_2 = datetime.datetime.now()
-				# print("duration 2", et_2-et_1)
+                loss_batch = self.loss_func(sampled_logit_batch, sampled_target_batch)
+                losses.append(loss_batch.item())
 
-				# logit_batch = self.model.m_ss.params(output_batch)
-				recall_batch, mrr_batch = evaluate(sampled_logit_batch, sampled_target_batch, warm_start_mask, k=self.topk)
+                # et_2 = datetime.datetime.now()
+                # print("duration 2", et_2-et_1)
 
-				weights.append( int( warm_start_mask.int().sum() ) )
-				recalls.append(recall_batch)
-				mrrs.append(mrr_batch)
+                # logit_batch = self.model.m_ss.params(output_batch)
+                recall_batch, mrr_batch = evaluate(sampled_logit_batch, sampled_target_batch, warm_start_mask, k=self.topk)
 
-				# et_3 = datetime.datetime.now()
-				# print("duration 3", et_3-et_2)
+                weights.append( int( warm_start_mask.int().sum() ) )
+                recalls.append(recall_batch)
+                mrrs.append(mrr_batch)
 
-				total_test_num.append(y_action_batch.view(-1).size(0))
+                # et_3 = datetime.datetime.now()
+                # print("duration 3", et_3-et_2)
 
-		mean_losses = np.mean(losses)
-		mean_recall = np.average(recalls, weights=weights)
-		mean_mrr = np.average(mrrs, weights=weights)
+                total_test_num.append(y_action_batch.view(-1).size(0))
 
-		msg = "total_test_num"+str(np.sum(total_test_num))
-		self.m_log.addOutput2IO(msg)
+        mean_losses = np.mean(losses)
+        mean_recall = np.average(recalls, weights=weights)
+        mean_mrr = np.average(mrrs, weights=weights)
 
-		return mean_losses, mean_recall, mean_mrr
+        msg = "total_test_num"+str(np.sum(total_test_num))
+        self.m_log.addOutput2IO(msg)
+
+        return mean_losses, mean_recall, mean_mrr
 
     def eval(self, eval_data, batch_size, debug=False):
         self.model.eval()
