@@ -152,7 +152,7 @@ class TrainerRNN(object):
             if self.m_sample_full_flag == "full":
                 sampled_logit_batch, sampled_target_batch = self.model.m_ss(output_batch, y_action_batch, sample_ids, true_freq, sample_freq, acc_hits, self.device, self.m_remove_match, "full")
         
-            loss_batch = self.loss_func(sampled_logit_batch)
+            loss_batch = self.loss_func(sampled_logit_batch, sampled_target_batch)
             losses.append(loss_batch.item())
             loss_batch.backward()
             max_norm = 5.0
