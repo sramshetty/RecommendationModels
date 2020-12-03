@@ -9,15 +9,15 @@ import torch
 import numpy as np
 import os
 import datetime
-from loss import *
+from loss_shiv import *
 from network import *
+from evaluation_shiv import *
 from optimizer import *
-from trainer import *
+from trainer_shiv import *
 from torch.utils import data
 import pickle
 import sys
 from dataset_time import *
-# from data_time import *
 from logger import *
 import collections
 
@@ -256,7 +256,7 @@ def main():
 		# print("c weights", c_weights)
 		loss_function = LossFunction(loss_type=loss_type, use_cuda=args.cuda)
 
-		trainer = Trainer(log, network,
+		trainer = TrainerRNN(log, network,
 							  train_data=train_data_loader,
 							  eval_data=test_data_loader,
 							  optim=optimizer,
