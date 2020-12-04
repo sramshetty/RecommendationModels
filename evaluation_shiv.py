@@ -37,7 +37,7 @@ class Evaluation(object):
             for input_x_batch, target_y_batch, x_len_batch, idx_batch in dataloader:
                 input_x_batch = input_x_batch.to(self.device)
                 target_y_batch = target_y_batch.to(self.device)
-                x_len_batch = x_len_batch.to(self,device)
+                x_len_batch = x_len_batch.to(self.device)
                 warm_start_mask = (idx_batch>=self.warm_start).to(self.device)
                 
                 hidden = self.model.init_hidden()
