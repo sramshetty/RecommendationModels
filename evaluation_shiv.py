@@ -63,6 +63,47 @@ class Evaluation(object):
 
         return mean_losses, mean_recall, mean_mrr
 
+    # def eval(self, eval_data, batch_size, debug=False):
+    #     self.model.eval()
+
+    #     losses = []
+    #     recalls = []
+    #     mrrs = []
+    #     weights = []
+
+    #     dataloader = eval_data
+
+    #     eval_iter = 0
+
+    #     with torch.no_grad():
+    #         total_test_num = []
+    #         for input_x_batch, target_y_batch, idx_batch in dataloader:
+    #             input_x_batch = input_x_batch.to(self.device)
+    #             target_y_batch = target_y_batch.to(self.device)
+    #             warm_mask = (idx_batch >= self.warm_start)
+
+    #             logit_batch = self.model(input_x_batch)
+
+    #             logit_sampled_batch = logit_batch[:, target_y_batch.view(-1)]
+    #             loss_batch = self.loss_func(logit_sampled_batch)
+
+    #             losses.append(loss_batch.item())
+
+    #             recall_batch, mrr_batch = evaluate(logit_batch, target_y_batch, warm_mask, k=self.topk)
+
+    #             weights.append(int(warm_mask.int().sum()))
+    #             recalls.append(recall_batch)
+    #             mrrs.append(mrr_batch)
+
+    #              #flattens to 1D to then get total number of elements in target_y_batch
+    #             total_test_num.append(target_y_batch.view(-1).size(0))
+
+    #     mean_loss = np.mean(losses)
+    #     mean_recall = np.mean(recalls)
+    #     mean_mrr = np.mean(mrrs)
+
+    #     return mean_loss, mean_recall, mean_mrr
+
     def eval(self, eval_data, batch_size, debug=False):
         self.model.eval()
 
@@ -72,6 +113,8 @@ class Evaluation(object):
         weights = []
 
         dataloader = eval_data
+        self.items = dataloader.m_dataset.items()
+        print(self.items)
 
         eval_iter = 0
 
@@ -105,7 +148,7 @@ class Evaluation(object):
         return mean_loss, mean_recall, mean_mrr
 
     def eval_pred(self, model, dataset, args):
-        [train, valid, test, usernum, itemnum] = copy.deepcopy(dataset)
+         [train, valid, test, usernum, itemnum] = copy.deepcopy(dataset)
 
         NDCG = 0.0
         HT = 0.0
