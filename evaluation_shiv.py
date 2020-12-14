@@ -148,7 +148,7 @@ class Evaluation(object):
         return mean_loss, mean_recall, mean_mrr
 
     def eval_pred(self, model, dataset, args):
-         [train, valid, test, usernum, itemnum] = copy.deepcopy(dataset)
+        [train, valid, test, usernum, itemnum] = copy.deepcopy(dataset)
 
         NDCG = 0.0
         HT = 0.0
