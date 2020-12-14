@@ -45,7 +45,7 @@ def get_recall(indices, targets, mask):
     hits = hits.nonzero()
 
     recall = float(hits.size(0)) / float( mask.int().sum())
-
+    print("recall", len(hits), len(mask), recall)
     return recall
 
 
@@ -55,7 +55,7 @@ def get_mrr(indices, targets, mask):
     hits *= mask[:20]
     
     hits = hits.nonzero()
-    ranks = hits[-1] + 1
+    ranks = hits + 1
     ranks = ranks.float()
     rranks = torch.reciprocal(ranks)
     mrr = torch.sum(rranks).data / float( mask.int().sum())
