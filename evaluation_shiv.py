@@ -148,7 +148,7 @@ class Evaluation(object):
                 
                 losses.append(loss_batch.item())
 
-                for i in range(target_y_batch):
+                for i in range(len(target_y_batch)):
                     target = target_y_batch[i]
                     recall, mrr = evaluate(logit_batch[i], target, warm_mask, k=self.topk)
                     print("recall", recall)
