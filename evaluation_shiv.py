@@ -128,11 +128,11 @@ class Evaluation(object):
                 warm_mask = (idx_batch >= self.warm_start)
 
                 logit_batch = self.model(input_x_batch)
-                print(logit_batch)
+
                 logit_sampled_batch = logit_batch[:, target_y_batch.view(-1)]
+                print(logit_sampled_batch)
                 loss_batch = self.loss_func(logit_sampled_batch)
     
-                print("loss", loss_batch)
                 losses.append(loss_batch.item())
 
                 recall_batch, mrr_batch = evaluate(logit_batch, target_y_batch, warm_mask, k=self.topk)
