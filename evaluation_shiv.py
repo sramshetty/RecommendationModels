@@ -127,7 +127,7 @@ class Evaluation(object):
                 input_x_batch = input_x_batch.to(self.device)
                 target_y_batch = target_y_batch.to(self.device)
                 print("input", input_x_batch.size())
-                print("target", target_y_batch.size())
+                print("target", target_y_batch) #target size = batch size
                 warm_mask = (idx_batch >= self.warm_start)
 
                 logit_batch = self.model(input_x_batch)
