@@ -155,8 +155,8 @@ class Evaluation(object):
                     recall, mrr = evaluate(logit_batch[i], target, warm_mask, k=self.topk)
                     print("recall", recall)
                     print("mrrs", mrr)
-                    item_recalls[target.item()] = recall
-                    item_mrrs[target.item()] = mrr
+                    item_recalls[target.item()] += recall
+                    item_mrrs[target.item()] += mrr
 
                 recall_batch, mrr_batch = evaluate(logit_batch, target_y_batch, warm_mask, k=self.topk)
                 weights.append(int(warm_mask.int().sum()))
@@ -166,6 +166,14 @@ class Evaluation(object):
                 #flattens to 1D to then get total number of elements in target_y_batch
                 total_test_num.append(target_y_batch.view(-1).size(0))
 
+                eval_iter += 1
+
+        for k, v in item_recalls.items():
+            item_recalls[k] = v/eval_iter
+        for k, v in item_mrrs.items():
+            item_mrrs[k] = v/eval_iter
+        print("item recalls", item_recalls)
+        print("item mrrs", item_mrrs)
         mean_loss = np.mean(losses)
         mean_recall = np.mean(recalls)
         mean_mrr = np.mean(mrrs)
