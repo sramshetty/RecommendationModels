@@ -124,22 +124,24 @@ class Evaluation(object):
         with torch.no_grad():
             total_test_num = []
             for input_x_batch, target_y_batch, idx_batch in dataloader:
-                input_x_batch = input_x_batch.to(self.device)
-                target_y_batch = target_y_batch.to(self.device)
-                print("input", input_x_batch.size())
-                print("target", target_y_batch) #target size = batch size
+                input_x_batch = input_x_batch.to(self.device) # batch size x sequence length
+                target_y_batch = target_y_batch.to(self.device) # batch size
+                print("input", input_x_batch.size()) 
+                print("target", target_y_batch) 
                 warm_mask = (idx_batch >= self.warm_start)
 
-                logit_batch = self.model(input_x_batch)
-                print(logit_batch.size())
-                logit_sampled_batch = logit_batch[:, target_y_batch.view(-1)]
-                print(logit_sampled_batch.size())
+                logit_batch = self.model(input_x_batch) # batch size x number of items
+                print(logit_batch.size()) 
+                logit_sampled_batch = logit_batch[:, target_y_batch.view(-1)] # batch size x batch size
+                print(logit_sampled_batch, logit_sampled_batch.size())
+            
                 loss_seq = 0
                 for seq in logit_sampled_batch:
                     print("seq", seq.size())
-                    loss_seq += self.loss_func(seq)
+                    
+                loss_batch = self.loss_func(logit_sampled_batch)
                 
-                losses.append(loss_seq.item())
+                losses.append(loss_batch.item())
 
                 recall_batch, mrr_batch = evaluate(logit_batch, target_y_batch, warm_mask, k=self.topk)
                 print("recall", recall_batch)
