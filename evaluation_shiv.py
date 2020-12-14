@@ -123,7 +123,8 @@ class Evaluation(object):
             for input_x_batch, target_y_batch, idx_batch in dataloader:
                 input_x_batch = input_x_batch.to(self.device)
                 target_y_batch = target_y_batch.to(self.device)
-                print(input_x_batch, target_y_batch)
+                print("input", input_x_batch)
+                print("target", target_y_batch)
                 warm_mask = (idx_batch >= self.warm_start)
 
                 logit_batch = self.model(input_x_batch)
