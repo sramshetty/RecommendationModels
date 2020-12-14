@@ -38,10 +38,10 @@ import torch
 #     return recall, mrr
 
 def get_recall(indices, targets, mask):
-    targets = targets.view(-1)
+    targets = targets.expand_as(indices)
     hits = (targets == indices)
         
-    hits *= mask.view(-1)
+    hits *= mask.expand_as(indices)
     hits = hits.nonzero()
 
     recall = float(hits.size(0)) / float( mask.int().sum())
