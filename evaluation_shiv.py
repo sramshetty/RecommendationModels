@@ -134,9 +134,9 @@ class Evaluation(object):
                 # Find popularity based on number of interactions in data
                 for seq in input_x_batch:
                     for item in seq:
-                        item_popularity[item] += 1
+                        item_popularity[item.item()] += 1
                 for item in target_y_batch:
-                    item_popularity[item] += 1
+                    item_popularity[item.item()] += 1
 
                 logit_batch = self.model(input_x_batch) # batch size x number of items
                 print(logit_batch.size()) 
@@ -152,8 +152,8 @@ class Evaluation(object):
                     recall, mrr = evaluate(logit_batch[i], target, warm_mask, k=self.topk)
                     print("recall", recall)
                     print("mrrs", mrr)
-                    item_recalls[target] = recall
-                    item_mrrs[target] = mrr
+                    item_recalls[target.item()] = recall
+                    item_mrrs[target.item()] = mrr
 
                 recall_batch, mrr_batch = evaluate(logit_batch, target_y_batch, warm_mask, k=self.topk)
                 weights.append(int(warm_mask.int().sum()))
