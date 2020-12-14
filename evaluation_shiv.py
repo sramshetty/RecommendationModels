@@ -113,7 +113,7 @@ class Evaluation(object):
         weights = []
 
         dataloader = eval_data
-        self.items = dataloader.m_dataset.items()
+        self.items = dataloader.m_dataset
         print(self.items)
 
         eval_iter = 0
