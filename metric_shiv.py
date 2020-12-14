@@ -50,10 +50,9 @@ def get_recall(indices, targets, mask):
 
 
 def get_mrr(indices, targets, mask):
-    tmp = targets.view(-1)
-    targets = tmp.expand_as(indices)
+    targets = targets.expand_as(indices)
     hits = (targets == indices)
-    hits *= mask.view(-1).expand_as(indices)
+    hits *= mask[:20]
     
     hits = hits.nonzero()
     ranks = hits[-1] + 1
