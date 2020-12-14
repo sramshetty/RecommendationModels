@@ -128,7 +128,7 @@ class Evaluation(object):
                 warm_mask = (idx_batch >= self.warm_start)
 
                 logit_batch = self.model(input_x_batch)
-
+                print(logit_batch)
                 logit_sampled_batch = logit_batch[:, target_y_batch.view(-1)]
                 loss_batch = self.loss_func(logit_sampled_batch)
     
