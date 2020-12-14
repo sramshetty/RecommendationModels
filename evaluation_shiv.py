@@ -135,9 +135,12 @@ class Evaluation(object):
 
                 logit_sampled_batch = logit_batch[:, target_y_batch.view(-1)]
                 print(logit_sampled_batch)
-                loss_batch = self.loss_func(logit_sampled_batch)
-    
-                losses.append(loss_batch.item())
+                loss_seq = 0
+                for seq in logit_sampled_batch:
+                    print("seq", seq)
+                    loss_seq += self.loss_func(seq)
+                
+                losses.append(loss_seq.item())
 
                 recall_batch, mrr_batch = evaluate(logit_batch, target_y_batch, warm_mask, k=self.topk)
                 print("recall", recall_batch)
