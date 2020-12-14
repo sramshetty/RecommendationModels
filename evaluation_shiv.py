@@ -148,6 +148,8 @@ class Evaluation(object):
                 
                 losses.append(loss_batch.item())
 
+                print(warm_mask)
+                print(warm_mask.size())
                 for i in range(len(target_y_batch)):
                     target = target_y_batch[i]
                     recall, mrr = evaluate(logit_batch[i], target, warm_mask, k=self.topk)
@@ -156,8 +158,6 @@ class Evaluation(object):
                     item_recalls[target.item()] = recall
                     item_mrrs[target.item()] = mrr
 
-                print(warm_mask)
-                print(warm_mask.size())
                 recall_batch, mrr_batch = evaluate(logit_batch, target_y_batch, warm_mask, k=self.topk)
                 weights.append(int(warm_mask.int().sum()))
                 recalls.append(recall_batch)
