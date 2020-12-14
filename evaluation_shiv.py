@@ -118,7 +118,6 @@ class Evaluation(object):
 
         dataloader = eval_data
         self.items = dataloader.m_dataset.m_itemmap
-        print(self.items)
 
         eval_iter = 0
 
@@ -132,12 +131,12 @@ class Evaluation(object):
                 warm_mask = (idx_batch >= self.warm_start)
 
                 logit_batch = self.model(input_x_batch)
-
+                print(logit_batch.size())
                 logit_sampled_batch = logit_batch[:, target_y_batch.view(-1)]
-                print(logit_sampled_batch)
+                print(logit_sampled_batch.size())
                 loss_seq = 0
                 for seq in logit_sampled_batch:
-                    print("seq", seq)
+                    print("seq", seq.size())
                     loss_seq += self.loss_func(seq)
                 
                 losses.append(loss_seq.item())
