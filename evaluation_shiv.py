@@ -111,7 +111,8 @@ class Evaluation(object):
         recalls = []
         mrrs = []
         weights = []
-
+        
+        item_popularity = {}
         item_losses = {}
         item_recalls = {}
         item_mrrs = {}
@@ -130,27 +131,36 @@ class Evaluation(object):
                 print("target", target_y_batch) 
                 warm_mask = (idx_batch >= self.warm_start)
 
+                # Find popularity based on number of interactions in data
+                for seq in input_x_batch:
+                    for item in seq:
+                        item_popularity[item] += 1
+                for item in target_y_batch:
+                    item_popularity[item] += 1
+
                 logit_batch = self.model(input_x_batch) # batch size x number of items
                 print(logit_batch.size()) 
                 logit_sampled_batch = logit_batch[:, target_y_batch.view(-1)] # batch size x batch size
                 print(logit_sampled_batch, logit_sampled_batch.size())
-            
-                loss_seq = 0
-                for seq in logit_sampled_batch:
-                    print("seq", seq.size())
                     
                 loss_batch = self.loss_func(logit_sampled_batch)
                 
                 losses.append(loss_batch.item())
 
+                for i in range(target_y_batch):
+                    target = target_y_batch[i]
+                    recall, mrr = evaluate(logit_batch[i], target, warm_mask, k=self.topk)
+                    print("recall", recall)
+                    print("mrrs", mrr)
+                    item_recalls[target] = recall
+                    item_mrrs[target] = mrr
+
                 recall_batch, mrr_batch = evaluate(logit_batch, target_y_batch, warm_mask, k=self.topk)
-                print("recall", recall_batch)
-                print("mrrs", mrr_batch)
                 weights.append(int(warm_mask.int().sum()))
                 recalls.append(recall_batch)
                 mrrs.append(mrr_batch)
-
-                 #flattens to 1D to then get total number of elements in target_y_batch
+                
+                #flattens to 1D to then get total number of elements in target_y_batch
                 total_test_num.append(target_y_batch.view(-1).size(0))
 
         mean_loss = np.mean(losses)
