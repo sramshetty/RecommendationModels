@@ -6,6 +6,7 @@ import datetime
 import random
 import sys
 import copy
+from collections import defaultdict
 
 class Evaluation(object):
     def __init__(self, model, loss_func, use_cuda, k=20, warm_start=5):
@@ -112,10 +113,10 @@ class Evaluation(object):
         mrrs = []
         weights = []
         
-        item_popularity = {}
-        item_losses = {}
-        item_recalls = {}
-        item_mrrs = {}
+        item_popularity = defaultdict(int)
+        item_losses = defaultdict(int)
+        item_recalls = defaultdict(int)
+        item_mrrs = defaultdict(int)
 
         dataloader = eval_data
         self.items = dataloader.m_dataset.m_itemmap
