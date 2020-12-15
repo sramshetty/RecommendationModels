@@ -2,7 +2,7 @@ import torch
 from collections import defaultdict
 
 def get_recall(indices, targets, mask):
-    item_recalls = defaultdict(int)
+    item_recalls = defaultdict(float)
     item_counts = defaultdict(int)
 
     targets = targets.view(-1, 1).expand_as(indices)
