@@ -128,9 +128,7 @@ class Evaluation(object):
             for input_x_batch, target_y_batch, idx_batch in dataloader:
                 input_x_batch = input_x_batch.to(self.device) # batch size x sequence length
                 target_y_batch = target_y_batch.to(self.device) # batch size
-                print("input", input_x_batch.size()) 
-                print("target", target_y_batch) 
-                warm_mask = (idx_batch >= self.warm_start)
+                warm_mask = (idx_batch >= self.warm_start) # batch size
 
                 # Find popularity based on number of interactions in data
                 for seq in input_x_batch:
@@ -140,21 +138,15 @@ class Evaluation(object):
                     item_popularity[item.item()] += 1
 
                 logit_batch = self.model(input_x_batch) # batch size x number of items
-                print(logit_batch.size()) 
+
                 logit_sampled_batch = logit_batch[:, target_y_batch.view(-1)] # batch size x batch size
-                print(logit_sampled_batch, logit_sampled_batch.size())
                     
                 loss_batch = self.loss_func(logit_sampled_batch)
-                
                 losses.append(loss_batch.item())
 
-                print(warm_mask)
-                print(warm_mask.size())
                 for i in range(len(target_y_batch)):
                     target = target_y_batch[i]
                     recall, mrr = evaluate_item(logit_batch[i], target, warm_mask, k=self.topk)
-                    print("recall", recall)
-                    print("mrrs", mrr)
                     item_recalls[target.item()] += recall
                     item_mrrs[target.item()] += mrr
                     num_eval[target.item()] += 1
