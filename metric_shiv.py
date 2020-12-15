@@ -8,6 +8,7 @@ def get_recall(indices, targets, mask):
         
     hits *= mask.view(-1, 1).expand_as(indices)
     hits = hits.nonzero()
+    print(hits)
 
     for item in targets:
         for hit in hits:
