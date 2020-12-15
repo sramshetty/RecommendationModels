@@ -148,7 +148,7 @@ class Evaluation(object):
                 
                 for k, v in item_rec.items():
                     print(k, v)
-                    item_recalls[k] += v
+                    item_recalls[k].append(v)
                 
                 weights.append(int(warm_mask.int().sum()))
                 recalls.append(recall_batch)
@@ -158,7 +158,6 @@ class Evaluation(object):
                 total_test_num.append(target_y_batch.view(-1).size(0))
 
         for k, v in item_recalls.items():
-            print(v)
             if None == v:
                 item_recalls[k] = 0
             else:
