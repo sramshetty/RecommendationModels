@@ -166,9 +166,9 @@ class Evaluation(object):
             item_mrrs[k] = np.mean(v)
 
         for k in item_popularity.keys():
-            if item_recalls[k] is None:
+            if item_recalls[k] is []:
                 item_recalls[k].append(0)
-            if item_mrrs[k] is None:
+            if item_mrrs[k] is []:
                 item_mrrs[k].append(0)
 
         print("pop", type(item_popularity.values()))
