@@ -19,8 +19,8 @@ def get_recall(indices, targets, mask):
                 if x == item:
                     item_recalls[item] += 1
 
-    for item,hits in item_recalls.items():
-        item_recalls[item] = hits / item_counts[item]
+    for item,hit in item_recalls.items():
+        item_recalls[item] = hit / item_counts[item]
 
     recall = float(hits.size(0)) / float( mask.int().sum())
 
