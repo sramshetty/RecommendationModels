@@ -7,6 +7,7 @@ import random
 import sys
 import copy
 from collections import defaultdict
+import matplotlib.pyplot as plt
 
 class Evaluation(object):
     def __init__(self, model, loss_func, use_cuda, k=20, warm_start=5):
@@ -164,9 +165,16 @@ class Evaluation(object):
         for k, v in item_mrrs.items():
             item_mrrs[k] = np.mean(v)
 
-        #print("item recalls", item_recalls)
-        print("item mrrs", item_mrrs)
-        #print("popularity", item_popularity)
+        recall_fig = plt.figure()
+        axr = recall_fig.add_axes([0,0,1,1])
+        axr.bar(list(item_popularity.values()),list(item_recalls.values()))
+        plt.savefig('recall_popularity.png')
+
+        mrr_fig = plt.figure()
+        axm = mrr_fig.add_axes([0,0,1,1])
+        axm.bar(list(item_popularity.values()),list(item_mrrs.values()))
+        plt.savefig('mrr_popularity.png')
+
         mean_loss = np.mean(losses)
         mean_recall = np.mean(recalls)
         mean_mrr = np.mean(mrrs)
