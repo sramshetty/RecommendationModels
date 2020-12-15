@@ -158,7 +158,10 @@ class Evaluation(object):
                 total_test_num.append(target_y_batch.view(-1).size(0))
 
         for k, v in item_recalls.items():
-            item_recalls[k] = np.mean(v)
+            if None in v:
+                item_recalls[k] = 0
+            else:
+                item_recalls[k] = np.mean(v)
         # for k, v in item_mrrs.items():
         #     item_mrrs[k] = v/num_eval[k]
         print("item recalls", item_recalls)
