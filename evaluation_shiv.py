@@ -159,7 +159,7 @@ class Evaluation(object):
             item_recalls[k] = np.mean(v)
         # for k, v in item_mrrs.items():
         #     item_mrrs[k] = v/num_eval[k]
-        #print("item recalls", item_recalls)
+        print("item recalls", item_recalls)
         #print("item mrrs", item_mrrs)
         #print("popularity", item_popularity)
         mean_loss = np.mean(losses)
