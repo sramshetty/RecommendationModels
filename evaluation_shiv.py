@@ -144,13 +144,6 @@ class Evaluation(object):
                 loss_batch = self.loss_func(logit_sampled_batch)
                 losses.append(loss_batch.item())
 
-                for i in range(len(target_y_batch)):
-                    target = target_y_batch[i]
-                    recall, mrr = evaluate_item(logit_batch[i], target, warm_mask, k=self.topk)
-                    item_recalls[target.item()] += recall
-                    item_mrrs[target.item()] += mrr
-                    num_eval[target.item()] += 1
-
                 recall_batch, mrr_batch = evaluate(logit_batch, target_y_batch, warm_mask, k=self.topk)
                 weights.append(int(warm_mask.int().sum()))
                 recalls.append(recall_batch)
