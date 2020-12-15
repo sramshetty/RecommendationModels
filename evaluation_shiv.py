@@ -167,9 +167,9 @@ class Evaluation(object):
 
         for k in item_popularity.keys():
             if item_recalls[k] is None:
-                item_recalls[k] = 0
+                item_recalls[k].append(0)
             if item_mrrs[k] is None:
-                item_mrrs[k] = 0
+                item_mrrs[k].append(0)
 
         print("pop", type(item_popularity.values()))
         print("rec", item_recalls.values())
