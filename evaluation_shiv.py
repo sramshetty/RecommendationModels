@@ -152,7 +152,7 @@ class Evaluation(object):
                 print(warm_mask.size())
                 for i in range(len(target_y_batch)):
                     target = target_y_batch[i]
-                    recall, mrr = evaluate(logit_batch[i], target, warm_mask, k=self.topk)
+                    recall, mrr = evaluate_item(logit_batch[i], target, warm_mask, k=self.topk)
                     print("recall", recall)
                     print("mrrs", mrr)
                     item_recalls[target.item()] += recall
