@@ -121,7 +121,7 @@ class Evaluation(object):
         dataloader = eval_data
         self.items = dataloader.m_dataset.m_itemmap
 
-        eval_iter = 0
+        num_eval = defaultdict(int)
 
         with torch.no_grad():
             total_test_num = []
@@ -157,6 +157,7 @@ class Evaluation(object):
                     print("mrrs", mrr)
                     item_recalls[target.item()] += recall
                     item_mrrs[target.item()] += mrr
+                    num_eval[target.item()] += 1
 
                 recall_batch, mrr_batch = evaluate(logit_batch, target_y_batch, warm_mask, k=self.topk)
                 weights.append(int(warm_mask.int().sum()))
@@ -166,12 +167,10 @@ class Evaluation(object):
                 #flattens to 1D to then get total number of elements in target_y_batch
                 total_test_num.append(target_y_batch.view(-1).size(0))
 
-                eval_iter += 1
-
         for k, v in item_recalls.items():
-            item_recalls[k] = v/eval_iter
+            item_recalls[k] = v/num_eval[k]
         for k, v in item_mrrs.items():
-            item_mrrs[k] = v/eval_iter
+            item_mrrs[k] = v/num_eval[k]
         print("item recalls", item_recalls)
         print("item mrrs", item_mrrs)
         mean_loss = np.mean(losses)
