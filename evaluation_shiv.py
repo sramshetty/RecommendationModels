@@ -147,7 +147,7 @@ class Evaluation(object):
                 recall_batch, item_rec, mrr_batch = evaluate(logit_batch, target_y_batch, warm_mask, k=self.topk)
                 
                 for k, v in item_rec.items():
-                    print(item_recalls)
+                    print(k, v)
                     item_recalls[k] += v
                 
                 weights.append(int(warm_mask.int().sum()))
