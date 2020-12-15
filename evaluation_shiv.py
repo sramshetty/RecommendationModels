@@ -149,7 +149,7 @@ class Evaluation(object):
                 for k, v in item_rec.items():
                     item_recalls[k] += v
                 for k, v in counts.items():
-                    num_eval[k] = counts
+                    num_eval[k] = v
                 
                 weights.append(int(warm_mask.int().sum()))
                 recalls.append(recall_batch)
