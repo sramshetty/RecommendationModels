@@ -114,12 +114,11 @@ class Evaluation(object):
         weights = []
         
         item_popularity = defaultdict(int)
-        item_losses = defaultdict(int)
+        item_losses = defaultdict(float)
         item_recalls = defaultdict(list)
-        item_mrrs = defaultdict(int)
+        item_mrrs = defaultdict(float)
 
         dataloader = eval_data
-        self.items = dataloader.m_dataset.m_itemmap
 
         num_eval = defaultdict(int)
 
@@ -147,7 +146,6 @@ class Evaluation(object):
                 recall_batch, item_rec, mrr_batch = evaluate(logit_batch, target_y_batch, warm_mask, k=self.topk)
                 
                 for k, v in item_rec.items():
-                    print(k, v)
                     item_recalls[k].append(v)
                 
                 weights.append(int(warm_mask.int().sum()))
@@ -158,10 +156,7 @@ class Evaluation(object):
                 total_test_num.append(target_y_batch.view(-1).size(0))
 
         for k, v in item_recalls.items():
-            if None == v:
-                item_recalls[k] = 0
-            else:
-                item_recalls[k] = np.mean(v)
+            item_recalls[k] = np.mean(v)
         # for k, v in item_mrrs.items():
         #     item_mrrs[k] = v/num_eval[k]
         #print("item recalls", item_recalls)
