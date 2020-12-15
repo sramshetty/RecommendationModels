@@ -19,9 +19,12 @@ def get_recall(indices, targets, mask):
                 if x == item:
                     item_recalls[item] += 1
 
+    for item,hits in item_recalls.items():
+        item_recalls[item] = hits / item_counts[item]
+
     recall = float(hits.size(0)) / float( mask.int().sum())
 
-    return recall, item_recalls, item_counts
+    return recall, item_recalls
 
 
 def get_mrr(indices, targets, mask):
@@ -44,7 +47,7 @@ def evaluate(indices, targets, mask, k=20, debug=False):
     indices = indices.cpu()
     targets = targets.cpu()
 
-    recall, item_recall, item_counts = get_recall(indices, targets, mask)
+    recall, item_recall = get_recall(indices, targets, mask)
     mrr = get_mrr(indices, targets, mask)
 
-    return recall, item_recall, item_counts, mrr
+    return recall, item_recall, mrr
