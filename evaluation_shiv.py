@@ -171,9 +171,9 @@ class Evaluation(object):
             if item_mrrs[k] is None:
                 item_mrrs[k] = 0
 
-        print("pop", item_popularity.values()[:10])
-        print("rec", item_recalls.values()[:10])
-        print("mrr", item_mrrs.values()[:10])
+        print("pop", type(item_popularity.values()))
+        print("rec", item_recalls.values())
+        print("mrr", item_mrrs.values())
         recall_fig = plt.figure()
         axr = recall_fig.add_axes([0,0,1,1])
         axr.bar(item_popularity.values(),item_recalls.values())
