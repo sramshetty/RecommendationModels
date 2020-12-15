@@ -116,7 +116,7 @@ class Evaluation(object):
         item_popularity = defaultdict(int)
         item_losses = defaultdict(float)
         item_recalls = defaultdict(list)
-        item_mrrs = defaultdict(float)
+        item_mrrs = defaultdict(list)
 
         dataloader = eval_data
 
