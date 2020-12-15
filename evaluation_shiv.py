@@ -171,14 +171,17 @@ class Evaluation(object):
             if item_mrrs[k] is None:
                 item_mrrs[k] = 0
 
+        print("pop", item_popularity.values()[:10])
+        print("rec", item_recalls.values()[:10])
+        print("mrr", item_mrrs.values()[:10])
         recall_fig = plt.figure()
         axr = recall_fig.add_axes([0,0,1,1])
-        axr.bar(list(item_popularity.values()),list(item_recalls.values()))
+        axr.bar(item_popularity.values(),item_recalls.values())
         plt.savefig('recall_popularity.png')
 
         mrr_fig = plt.figure()
         axm = mrr_fig.add_axes([0,0,1,1])
-        axm.bar(list(item_popularity.values()),list(item_mrrs.values()))
+        axm.bar(item_popularity.values(),item_mrrs.values())
         plt.savefig('mrr_popularity.png')
 
         mean_loss = np.mean(losses)
