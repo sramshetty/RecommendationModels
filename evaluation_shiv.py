@@ -158,6 +158,7 @@ class Evaluation(object):
                 total_test_num.append(target_y_batch.view(-1).size(0))
 
         for k, v in item_recalls.items():
+            print(v)
             if None == v:
                 item_recalls[k] = 0
             else:
