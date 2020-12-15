@@ -165,6 +165,12 @@ class Evaluation(object):
         for k, v in item_mrrs.items():
             item_mrrs[k] = np.mean(v)
 
+        for k in item_popularity.keys():
+            if item_recalls[k] is None:
+                item_recalls[k] = 0
+            if item_mrrs[k] is None:
+                item_mrrs[k] = 0
+
         recall_fig = plt.figure()
         axr = recall_fig.add_axes([0,0,1,1])
         axr.bar(list(item_popularity.values()),list(item_recalls.values()))
