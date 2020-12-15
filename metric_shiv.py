@@ -16,6 +16,8 @@ def get_recall(indices, targets, mask):
         if mask[i]:
             item_counts[items[i].item()] += 1
     
+    print(hits)
+    print(item_counts)
     for x in hits[:,0]:
         item_recalls[x.item()] += 1
 
