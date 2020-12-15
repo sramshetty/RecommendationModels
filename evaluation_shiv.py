@@ -173,6 +173,7 @@ class Evaluation(object):
             item_mrrs[k] = v/num_eval[k]
         print("item recalls", item_recalls)
         print("item mrrs", item_mrrs)
+        print("popularity", item_popularity)
         mean_loss = np.mean(losses)
         mean_recall = np.mean(recalls)
         mean_mrr = np.mean(mrrs)
