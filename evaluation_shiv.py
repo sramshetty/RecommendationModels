@@ -173,9 +173,6 @@ class Evaluation(object):
         # print("pop", type(item_popularity.values()))
         # print("rec", item_recalls.values())
         # print("mrr", item_mrrs.values())
-        recall_fig = plt.figure()
-        recall_fig.plot()
-        plt.savefig('recall_popularity.png')
 
         recall_fig, ax = plt.subplots()
         ax.plot(list(item_popularity.values()), list(item_recalls.values()))
