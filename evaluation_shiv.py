@@ -121,8 +121,6 @@ class Evaluation(object):
 
         dataloader = eval_data
 
-        num_eval = defaultdict(int)
-
         with torch.no_grad():
             total_test_num = []
             for input_x_batch, target_y_batch, idx_batch in dataloader:
@@ -175,12 +173,16 @@ class Evaluation(object):
         # print("rec", item_recalls.values())
         # print("mrr", item_mrrs.values())
         recall_fig = plt.figure()
-        axr = recall_fig.add_axes([0,0,1,1])
+        axr = recall_fig.add_axes([0,0,50,50])
+        axr.set_ylabel('Recall@20')
+        axr.set_xlabel('Popularity')
         axr.bar(list(item_popularity.values()), list(item_recalls.values()))
         plt.savefig('recall_popularity.png')
 
         mrr_fig = plt.figure()
-        axm = mrr_fig.add_axes([0,0,1,1])
+        axm = mrr_fig.add_axes([0,0,50,50])
+        axm.set_ylabel('MRR@20')
+        axm.set_xlabel('Popularity')
         axm.bar(list(item_popularity.values()), list(item_mrrs.values()))
         plt.savefig('mrr_popularity.png')
 
