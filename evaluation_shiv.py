@@ -185,7 +185,7 @@ class Evaluation(object):
             mrr_popularities[v] = np.mean(mrr_vals)
 
         recall_fig, ax = plt.subplots()
-        ax.plot(list(recall_popularities.keys()), list(recall_popularities.values()))
+        ax.bar(list(recall_popularities.keys()), list(recall_popularities.values()))
         ax.set(xlabel='popularity', ylabel='Recall@20',
             title='Recall of items with varying popularity')
         ax.grid()
@@ -193,7 +193,7 @@ class Evaluation(object):
         plt.show()
 
         mrr_fig, axm = plt.subplots()
-        axm.plot(list(mrr_popularities.keys()), list(mrr_popularities.values()))
+        axm.bar(list(mrr_popularities.keys()), list(mrr_popularities.values()))
         axm.set(xlabel='popularity', ylabel='MRR@20',
             title='MRR of items with varying popularity')
         axm.grid()
