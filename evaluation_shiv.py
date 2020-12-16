@@ -176,14 +176,14 @@ class Evaluation(object):
         axr = recall_fig.add_axes([0,0,10,10])
         axr.set_ylabel('Recall@20')
         axr.set_xlabel('Popularity')
-        axr.bar(list(item_popularity.values())[:100], list(item_recalls.values())[:100])
+        axr.bar(list(item_popularity.values())[:10], list(item_recalls.values())[:10])
         plt.savefig('recall_popularity.png')
 
         mrr_fig = plt.figure()
         axm = mrr_fig.add_axes([0,0,10,10])
         axm.set_ylabel('MRR@20')
         axm.set_xlabel('Popularity')
-        axm.bar(list(item_popularity.values())[:100], list(item_mrrs.values())[:100])
+        axm.bar(list(item_popularity.values())[:10], list(item_mrrs.values())[:10])
         plt.savefig('mrr_popularity.png')
 
         mean_loss = np.mean(losses)
