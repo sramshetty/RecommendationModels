@@ -170,14 +170,19 @@ class Evaluation(object):
         for k, v in item_mrrs.items():
             item_mrrs[k] = np.mean(v)
 
-        recall_popularities = defaultdict(float)
-        mrr_popularities = defaultdict(float)
+        recall_popularities = defaultdict(list)
+        mrr_popularities = defaultdict(list)
 
         for k, v in item_popularity.items():
             if v < 100:
-                recall_popularities[k] = item_recalls[k]
-                mrr_popularities[k] = item_mrrs[k]
+                recall_popularities[v].append(item_recalls[k])
+                mrr_popularities[v].append(item_mrrs[k])
 
+        for v in recall_popularities.keys():
+            recall_vals = recall_popularities[v]
+            mrr_vals = mrr_popularities[v]
+            recall_popularities[v] = np.mean(recall_vals)
+            mrr_popularities[v] = np.mean(mrr_vals)
 
         recall_fig, ax = plt.subplots()
         ax.plot(list(recall_popularities.keys()), list(recall_popularities.values()))
