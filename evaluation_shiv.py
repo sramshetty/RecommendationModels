@@ -7,6 +7,7 @@ import random
 import sys
 import copy
 from collections import defaultdict
+import matplotlib
 import matplotlib.pyplot as plt
 
 class Evaluation(object):
@@ -173,18 +174,24 @@ class Evaluation(object):
         # print("rec", item_recalls.values())
         # print("mrr", item_mrrs.values())
         recall_fig = plt.figure()
-        axr = recall_fig.add_axes([0,0,10,10])
-        axr.set_ylabel('Recall@20')
-        axr.set_xlabel('Popularity')
-        axr.bar(list(item_popularity.values())[:10], list(item_recalls.values())[:10])
+        recall_fig.plot()
         plt.savefig('recall_popularity.png')
 
-        mrr_fig = plt.figure()
-        axm = mrr_fig.add_axes([0,0,10,10])
-        axm.set_ylabel('MRR@20')
-        axm.set_xlabel('Popularity')
-        axm.bar(list(item_popularity.values())[:10], list(item_mrrs.values())[:10])
-        plt.savefig('mrr_popularity.png')
+        recall_fig, ax = plt.subplots()
+        ax.plot(list(item_popularity.values()), list(item_recalls.values()))
+        ax.set(xlabel='popularity', ylabel='Recall@20',
+            title='Recall of items with varying popularity')
+        ax.grid()
+        recall_fig.savefig("recall_popularity.png")
+        plt.show()
+
+        mrr_fig, axm = plt.subplots()
+        axm.plot(list(item_popularity.values()), list(item_mrrs.values()))
+        axm.set(xlabel='popularity', ylabel='MRR@20',
+            title='MRR of items with varying popularity')
+        axm.grid()
+        mrr_fig.savefig("mrr_popularity.png")
+        plt.show()
 
         mean_loss = np.mean(losses)
         mean_recall = np.mean(recalls)
