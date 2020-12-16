@@ -167,10 +167,10 @@ class Evaluation(object):
 
         for k in item_popularity.keys():
             print(type(item_recalls[k]))
-            if k in item_recalls:
-                item_recalls[k].append(0)
-            if k in item_mrrs:
-                item_mrrs[k].append(0)
+            if k not in item_recalls:
+                item_recalls[k] = 0
+            if k not in item_mrrs:
+                item_mrrs[k] = 0
 
         # print("pop", type(item_popularity.values()))
         # print("rec", item_recalls.values())
