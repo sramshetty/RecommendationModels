@@ -170,12 +170,17 @@ class Evaluation(object):
         for k, v in item_mrrs.items():
             item_mrrs[k] = np.mean(v)
 
-        # print("pop", type(item_popularity.values()))
-        # print("rec", item_recalls.values())
-        # print("mrr", item_mrrs.values())
+        recall_popularities = defaultdict(float)
+        mrr_popularities = defaultdict(float)
+
+        for k, v in item_popularity.items():
+            if v < 100:
+                recall_popularities[k] = item_recalls[k]
+                mrr_popularities[k] = item_mrrs[k]
+
 
         recall_fig, ax = plt.subplots()
-        ax.plot(list(item_popularity.values()), list(item_recalls.values()))
+        ax.plot(list(recall_popularities.keys()), list(recall_popularities.values()))
         ax.set(xlabel='popularity', ylabel='Recall@20',
             title='Recall of items with varying popularity')
         ax.grid()
@@ -183,7 +188,7 @@ class Evaluation(object):
         plt.show()
 
         mrr_fig, axm = plt.subplots()
-        axm.plot(list(item_popularity.values()), list(item_mrrs.values()))
+        axm.plot(list(mrr_popularities.keys()), list(mrr_popularities.values()))
         axm.set(xlabel='popularity', ylabel='MRR@20',
             title='MRR of items with varying popularity')
         axm.grid()
