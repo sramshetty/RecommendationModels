@@ -159,18 +159,17 @@ class Evaluation(object):
                 #flattens to 1D to then get total number of elements in target_y_batch
                 total_test_num.append(target_y_batch.view(-1).size(0))
 
+        for k in item_popularity.keys():
+            if k not in item_recalls:
+                item_recalls[k].append(0)
+            if k not in item_mrrs:
+                item_mrrs[k].append(0)
+
         for k, v in item_recalls.items():
             item_recalls[k] = np.mean(v)
 
         for k, v in item_mrrs.items():
             item_mrrs[k] = np.mean(v)
-
-        for k in item_popularity.keys():
-            print(type(item_recalls[k]))
-            if k not in item_recalls:
-                item_recalls[k] = 0
-            if k not in item_mrrs:
-                item_mrrs[k] = 0
 
         # print("pop", type(item_popularity.values()))
         # print("rec", item_recalls.values())
