@@ -25,23 +25,29 @@ class GRU4REC(nn.Module):
             
         self.create_final_activation(final_act)
 
-#         if self.embedding_dim != -1:
         self.look_up = nn.Embedding(input_size, self.embedding_dim).to(self.device)
         self.gru = nn.GRU(self.embedding_dim, self.hidden_size, self.num_layers, dropout=self.dropout_hidden)
-#         else:
-#             self.onehot_buffer = self.init_emb()
-#             self.embed = torch.FloatTensor(self.window_size, self.batch_size, self.output_size)
-#             self.embed = onehot_buffer.to(self.device)   
-#             self.look_up = self.onehot_encode
-#             self.gru = nn.GRU(self.input_size, self.hidden_size, self.num_layers, dropout=self.dropout_hidden)
-            
+
+
+
+
         if shared_embedding:
             print("share embedding")
             self.out_matrix = self.look_up.weight.to(self.device)
-        else:
-            print("separate embedding")
-            self.out_matrix = torch.rand(output_size, hidden_size, requires_grad=True).to(self.device)
+
+
+
             
+
+
+
+
+
+
+
+
+
+
         self = self.to(self.device)
 
     def create_final_activation(self, final_act):
@@ -75,10 +81,10 @@ class GRU4REC(nn.Module):
         embedded = input
         embedded = self.look_up(embedded)
     
-        embedded = embedded.transpose(0, 1)
+        # embedded = embedded.transpose(0, 1)
 
         # print("embedded size", embedded.size(), input_len.shape)
-        embedded_pad = torch.nn.utils.rnn.pack_padded_sequence(embedded, input_len)
+        embedded_pad = torch.nn.utils.rnn.pack_padded_sequence(embedded, input_len, batch_first=True)
         # print("embedded_pad size", embedded_pad.size())
         output, hidden = self.gru(embedded_pad, hidden) # (sequence, B, H)
 
@@ -90,7 +96,7 @@ class GRU4REC(nn.Module):
         # print("lastoutput size", last_output.size())
 
         last_output = last_output.view(-1, last_output.size(-1))  # (B,H)
-        output = F.linear(last_output, self.out_matrix)
+        output = self.h2o(last_output)
 #         logit = self.final_activation(output) ## (B, output_size)
         logit = output
         return logit, hidden
@@ -128,8 +134,7 @@ class GRU4REC(nn.Module):
         '''
         h0 = torch.zeros(self.num_layers, self.batch_size, self.hidden_size).to(self.device)
         return h0
-
-
+        
 
 class SelfAttention(nn.Module):
 
